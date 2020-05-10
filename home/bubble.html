@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet"  href="Style.css">
+</head>
+
+
+<body>
+    <div class="container-fluid">
+        <div class="row border border-primary">
+            <nav class="nav">
+                <a class="nav-link active" href="../index.html">Home</a>
+                <a class="nav-link" href="../analyse.html">Compare/Analyse</a>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-2 border">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="bubble.html">Bubble Sort</a>
+                    <a class="nav-link" href="insertion.html">Insertion Sort</a>
+                    <a class="nav-link" href="selection.html">Selection Sort</a>
+                    <a class="nav-link" href="merge.html">Merge Sort</a>
+                    <a class="nav-link" href="quick.html">Quick Sort</a>
+                  </nav>
+            </div>
+            <div class="col-xl-10 border">
+                <div class="container-fluid mContainer" id = "main_container">
+                    <div class="row">
+                        <p class="h1">Bubble sort</p>
+                    </div>
+                    <div class="row">
+                        <p class="lead">
+                            This is one of the simplest sorting algorithms. This algorithm looks at the first two elements of the list and swaps them if they are in wrong order, after this it looks at the second and third elements of the list and swaps them if they are in wrong order and this process goes on for the whole list. This  is one pass through which results in the smallest or the largest element to reach the end of the list depending on whether we are sorting in ascending or descending order. Repeated pass throughs are done till the whole list is sorted. The smaller or larger elements seem to “bubble” to the top of the list.
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="h3">Time Complexity <br/></p>
+                        </div>
+                        <div class="col"><p class="lead">Worst Case: n^2</p></div>
+                        <div class="col"><p class="lead">Average Case: n^2</p></div>
+                        <div class="col"><p class="lead">Best Case: n</p></div>
+                    </div>
+                    <div class="row">
+                        <form>
+                            <div class="form-row align-items-center">
+                              <div class="col-auto my-1">
+                                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                  <option selected>Choose...</option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
+                              </div>
+                              <div class="col-auto my-1">
+                                <div class="custom-control custom-checkbox mr-sm-2">
+                                  <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
+                                  <label class="custom-control-label" for="customControlAutosizing">Remember my preference</label>
+                                </div>
+                              </div>
+                              <div class="col-auto my-1">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                              </div>
+                            </div>
+                          </form>
+                    </div>
+                    <div class="row" id = "canvas_container">
+                        <canvas>
+
+                        </canvas>
+                    </div>          
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/bubble.js"></script>
+</body>
+</html>
