@@ -42,27 +42,59 @@ const otherBtnCN = "btn btn-success";
 
 //Array to be animated 
 var aArray = [];
+var oArray = [];
 var aArraySize = 10;
 var aArrayType = "random";
 setArray();
+var pass = 0;
+var counter = 0;
 
 //Variables for animation frames;
 var requestID = "";
 
-//variables for swaps
+//Object
+function Block(index , value , x , y ){
+    this.index = index;
+    this.value = value;
+    this.x = x;
+    this.y = y;
+    this.xl = unitx;
+    this.yl = value*unity;
+    
+    this.draw = function(){
+       // console.log(this.x);
+        //console.log(this.y);
+        c.beginPath();
+        c.fillStyle = "yellow";
+        c.fillRect(this.x , this.y , this.xl , this.yl);
+        c.fillStyle = "blue";
+        c.strokeRect(this.x , this.y , this.xl , this.yl)
+    }
+    /*
+    this.update = function(j){
+        this.x += ((j-this.index)*unitx);
+        this.index = j; 
+        //this.draw();
+    }*/
+}
 
 //function to reset everything
 function reset(){
+    oArray = [];
     aArray = [];
     aArraySize = 10;
+    unitx = lengthx/aArraySize;
     aArrayType = "random";
+    pass = 0;
     setArray();
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
+    
 }
 
 //Function for Size of List toggle
 function setListSize(size){
+    pass = 0; 
     btnSize10.parentElement.className = otherBtnCN;
     btnSize25.parentElement.className = otherBtnCN;
     btnSize50.parentElement.className = otherBtnCN;
@@ -77,10 +109,12 @@ function setListSize(size){
         btnSize10.parentElement.className = selctedBtnCN;
     }
     aArraySize = size;
+    unitx = lengthx/size;
     setArray();
 }
 //Function for tyoe of List toggle
 function setListType(type_number){
+    pass = 0;
     type = "random";
     if(type_number == 2)
         type = "sorted wrong";
@@ -119,51 +153,80 @@ function setArray(){
             aArray.push(i*m);
         }
     }
-
-    console.log(aArray);
-    resetAnimation();
+    setObjectArray();
+    drawObjectArray();
+    //console.log(aArray);
+    //resetAnimation();
 }
 
-//Reset function also initialiser
-function resetAnimation(){
-    //Bottom line:
-    c.clearRect(0 , 0 , 1200 , 600);
-    c.beginPath();
-    c.fillStyle="blue";
-    c.fillRect(startx - 50,starty,startx + lengthx + 50,5);
-    tUnitx = (lengthx)/aArraySize;
-    unitx = tUnitx;
-
+//set object array
+function setObjectArray(){
+    oArray = [];
     for(var i = 0 ; i < aArraySize ; i++){
-        c.beginPath();
-        var x = startx + tUnitx*i;
-        var y = starty - unity*aArray[i];
-        c.fillStyle = "blue";
-        c.strokeRect(x , y , unitx , unity*aArray[i]);
-        c.fillStyle = "yellow";
-        c.fillRect(x , y , unitx , unity*aArray[i]);
-        c.fillStyle = "blue";
-        c.fillText(aArray[i], x-1 , y-1);
+        oArray.push(new Block(i , aArray[i] , startx+(i*unitx) , starty - (aArray[i]*unity) ));
     }
-
-
+    //console.log(oArray);
 }
+//Draw objects whenever reset
+function drawObjectArray(){
+    c.clearRect(0 , 0 , 1200 , 600);
+    for(var i = 0 ; i < aArraySize ; i++){
+        oArray[i].draw();
+    }
+}
+
+//Function to animate
+function sortAnimate(){
+    
+    requestID = requestAnimationFrame(sortAnimate);
+    if(pass >= aArraySize - 1){
+        pass = 0;
+        counter = 0
+    }
+    if(aArray[pass] > aArray[pass + 1]){
+        var temp = aArray[pass];
+        aArray[pass] = aArray[pass+1];
+        aArray[pass+1] = temp;
+    }
+    else{
+        counter++;
+    }
+    if(counter >= aArraySize-1){
+        pauseA();
+    }
+    setObjectArray();
+    c.clearRect(0,0,1200,600);
+    for(var i = 0 ; i < aArraySize ; i++){
+        oArray[i].draw();
+    }
+    pass++;
+}
+
+
 //Function to reset btns
 function resetBtns(){
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     btnSize10.disabled = false;
+    btnSize10.parentElement.className = selctedBtnCN;
     btnSize25.disabled = false;
+    btnSize25.parentElement.className = otherBtnCN;
     btnSize50.disabled = false;
+    btnSize50.parentElement.className = otherBtnCN;
     btnSize100.disabled = false;
+    btnSize100.parentElement.className = otherBtnCN;
     btnTypeR.disabled = false;
+    btnTypeR.parentElement.className = selctedBtnCN;
     btnTypeSW.disabled = false;
+    btnTypeSW.parentElement.className = otherBtnCN;
     btnTypeS.disabled = false;
+    btnTypeS.parentElement.className = otherBtnCN;
 }
 //Function for controls
 //For play
 btnPlayA.addEventListener("click",(e) => {
-    //sortAndDraw();
+    counter = 0;
+    sortAnimate();
     //sort();
     //Button disabled to stop multiple call of sortAndDraw()
     btnPlayA.disabled = true;
@@ -176,101 +239,50 @@ btnPlayA.addEventListener("click",(e) => {
     btnTypeSW.disabled = true;
     btnTypeS.disabled = true;
 });
+
 //For pause
 btnPauseA.addEventListener("click",(e) => {
-    console.log("pause");
+    cancelAnimationFrame(requestID);
+    console.log("pauseed");
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
+    //resetBtns();
+    btnPlayA.disabled = false;
+    btnPauseA.disabled = true;
+    btnSize10.disabled = false;
+    btnSize25.disabled = false;
+    btnSize50.disabled = false;
+    btnSize100.disabled = false;
+    btnTypeR.disabled = false;
+    btnTypeSW.disabled = false;
+    btnTypeS.disabled = false;
 });
+
 //For reset
 btnResetA.addEventListener("click",(e) => {
-    console.log("stop animation");
+    console.log("animation stopped");
+    cancelAnimationFrame(requestID);
     resetBtns();
     reset();
 });
 
-/*
-//functon to sort as well as animate :
-function sortAndDraw() {
-    //requestID = requestAnimationFrame(sortAndDraw);
-    //resetAnimation();
+function pauseA(){
+    cancelAnimationFrame(requestID);
+    console.log("pausedd");
+    btnPlayA.disabled = false;
+    btnPauseA.disabled = true;
+    //resetBtns();
+    btnPlayA.disabled = false;
+    btnPauseA.disabled = true;
+    btnSize10.disabled = false;
+    btnSize25.disabled = false;
+    btnSize50.disabled = false;
+    btnSize100.disabled = false;
+    btnTypeR.disabled = false;
+    btnTypeSW.disabled = false;
+    btnTypeS.disabled = false;
 }
 
-function sort(){
-    for (var i1 = 0 ; i1 < aArraySize-1 ; i1++){
-        for(var j1 = 0 ; j1 < aArraySize-i-1 ; j1++){
-            if(aArray[j1]>aArray[j1+1]){
-                obj1.x = startx + tUnitx*j1;
-                obj1.y = starty - unity*aArray[j1];
-                obj2.x = startx + tUnitx*(j1+1);
-                obj2.y = starty - unity*aArray[j1+1];
-                obj1.dx = (obj2.x - obj1.x)/10;
-                obj2.dx = (obj1.x - obj2.x)/10;
-                swapAnimation(j1);
-                wait(1000);
-            }
-            j++;
-        }
-        i++;
-    } 
-}
-
-function swapAnimation(j1){
-    var requestID = requestAnimationFrame(swapAnimation(j1));
-    c.clearRect(0 , 0 , 1200 , 600);
-    c.beginPath();
-    c.fillStyle="blue";
-    c.fillRect(startx - 50,starty,startx + lengthx + 50,5);
-    tUnitx = (lengthx)/aArraySize;
-    unitx = tUnitx - spacex;
-
-    for(var i = 0 ; i < aArraySize ; i++){
-        c.beginPath();
-        var x = startx + tUnitx*i;
-        var y = starty - unity*aArray[i];
-        c.fillStyle = "blue";
-        c.strokeRect(x , y , unitx , unity*aArray[i]);
-        c.fillStyle = "yellow";
-        c.fillRect(x , y , unitx , unity*aArray[i]);
-        c.fillStyle = "blue";
-        c.fillText(aArray[i], x-1 , y-1);
-    }
-
-    c.beginPath();
-    c.fillStyle = "blue";
-    c.fillRect(obj1.x, obj1.y , unitx , aArray[j1]*unity);
-    c.fillRect(obj2.x, obj2.y , unitx , aArray[j1+1]*unity);
-    if(obj1.x < obj2.x){
-        obj1.x += obj1.dx;
-        obj2.x += obj2.dx;
-    } 
-    else{
-        cancelAnimationFrame(requestID);
-        var temp = aArray[j1];
-        aArray[j1] = aArray[j1+1];
-        aArray[j1+1] = temp;
-    }
-
-}
-
-//function to delay
-function wait(ms){
-    var start = new Date().getTime();
-    var end = start;
-    while(end < start + ms) {
-        console.log("hey")
-      end = new Date().getTime();
-   }
- }
-*/
-//Function for resizing canvas not needed
-/*
-window.addEventListener("resize",function(){
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-    console.log(canvas);
-});
-*/
 
 
 
