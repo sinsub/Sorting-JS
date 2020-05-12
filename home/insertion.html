@@ -40,26 +40,13 @@
                             Insertion sort is a simple sorting algorithm. We start checking from the second number in the list and place it before the first number if it is smaller than the first number (Considering we are sorting in ascending order). Then we move to the next number and “insert” it into the position which makes this sub-list of length 3 sorted. Then we move to the next number and insert it into position in the same manner which makes this sub-list sorted. We continue this process till we reach the last element and insert it into the position and we end up with a sorted list.                        
                         </p>
                     </div>
-                    <div class = "row mContainer">
-                        <code> 
-                            i ← 1<br/>
-                            while i < length(A)<br/>
-                                j ← i<br/>
-                                while j > 0 and A[j-1] > A[j]<br/>
-                                    swap A[j] and A[j-1]<br/>
-                                    j ← j - 1<br/>
-                                end while<br/>
-                                i ← i + 1<br/>
-                            end while<br/>
-                        </code>
-                    </div>
                     <div class="row">
                         <div class="col">
                             <p class="h3">Time Complexity <br/></p>
                         </div>
-                        <div class="col"><p class="lead">Worst Case: n<sup>2</sup></p></div>
-                        <div class="col"><p class="lead">Average Case: n<sup>2</sup></p></div>
-                        <div class="col"><p class="lead">Best Case: n</p></div>
+                        <div class="col"><p class="lead">Worst Case: O(n<sup>2</sup>)</p></div>
+                        <div class="col"><p class="lead">Average Case: O(n<sup>2</sup>)</p></div>
+                        <div class="col"><p class="lead">Best Case: O(n)</p></div>
                     </div>
                     <div class="row">
                         <div class = "col">
@@ -121,7 +108,20 @@
                         <canvas>
 
                         </canvas>
-                    </div>          
+                    </div>    
+                    <div class = "row mContainer">
+                        <code> 
+                            i ← 1<br/>
+                            while i < length(A)<br/>
+                                j ← i<br/>
+                                while j > 0 and A[j-1] > A[j]<br/>
+                                    swap A[j] and A[j-1]<br/>
+                                    j ← j - 1<br/>
+                                end while<br/>
+                                i ← i + 1<br/>
+                            end while<br/>
+                        </code>
+                    </div>      
                 </div>
             </div>
         </div>

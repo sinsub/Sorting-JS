@@ -6,14 +6,14 @@ var canvasContainer = document.getElementById("a");
 //Canvas for animation :
 var canvas = document.querySelector('canvas');
 const canvasWidth  = 1200;
-const canvasHeight = 600; 
+const canvasHeight = 500; 
 canvas.width = canvasWidth
 canvas.height = canvasHeight;
 var c = canvas.getContext("2d");
 //Constants for canvas
 const startx = 50;
-const starty = 500;
-var lengthx = 900;
+const starty = 400;
+var lengthx = 1000;
 const lengthy = 5;
 //Variable for canvas
 var tUnitx = (lengthx)/10;
@@ -91,7 +91,7 @@ function reset(){
     aArraySize = 10;
     aArrayType = "random";
 
-    //Related to insetion sort algorithm
+    //Related to insertion sort algorithm
     pass = 1;
     current = 1
 
@@ -127,7 +127,7 @@ function setListSize(size){
 }
 //Function for tyoe of List toggle
 function setListType(type_number){
-    //Related to bubble sort algo
+    //Related to insertion sort algo
     pass = 1;
     current = 1;
 
@@ -192,7 +192,7 @@ function drawObjectArray(){
     }
 }
 
-//Function to animate bubble sort
+//Function to animate insertion sort
 function sortAnimate(){
     
     requestID = requestAnimationFrame(sortAnimate);
@@ -225,48 +225,9 @@ function sortAnimate(){
     c.clearRect(0,0,1200,600);
     for(var i = 0 ; i < aArraySize ; i++){
         oArray[i].draw();
-    }
-    
-    
-}
-
-
-
-
-/*
-function sortAnimate(){
-    
-    requestID = requestAnimationFrame(sortAnimate);
-    if(pass > aArraySize - 1){
-        pass = 1;
-        pauseA();
-    }
-    var current = pass;
-    for(var j = pass ; j >= 1 ; j--){
-        current = j;
-        c.clearRect(0,0,1200,600);
-        for(var i = 0 ; i < aArraySize ; i++){
-            oArray[i].draw();
-        }
-        if(aArray[j] < aArray[j-1]){
-            var temp = aArray[j];
-            aArray[j] = aArray[j-1];
-            aArray[j-1] = temp;
-        } else {
-            break;
-        }
     }    
-    //update object array:
-    setObjectArray();
-    //Draw the updated array
-    c.clearRect(0,0,1200,600);
-    for(var i = 0 ; i < aArraySize ; i++){
-        oArray[i].draw();
-    }
-    
-    pass++;
 }
-*/
+
 
 //Function to reset btns
 function resetBtns(){

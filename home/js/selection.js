@@ -1,8 +1,3 @@
-
-
-//Div that contains the canvas:
-var canvasContainer = document.getElementById("a");
-
 //Canvas for animation :
 var canvas = document.querySelector('canvas');
 const canvasWidth  = 1200;
@@ -13,7 +8,7 @@ var c = canvas.getContext("2d");
 //Constants for canvas
 const startx = 50;
 const starty = 400;
-const lengthx = 1000;
+var lengthx = 1000;
 const lengthy = 5;
 //Variable for canvas
 var tUnitx = (lengthx)/10;
@@ -47,10 +42,11 @@ var aArraySize = 10;
 var aArrayType = "random";
 setArray();
 
-//Related to bubble sort
+//Related to selection sort
 var pass = 0;
-var cIndex = 0;
-var counter = 0;
+var current = 0;
+var min = aArray[0];
+var minIndex = 0;
 
 //Variables for animation frames;
 var requestID = "";
@@ -68,12 +64,14 @@ function Block(index , value , x , y ){
         c.beginPath();
         c.fillStyle = "yellow";
 
-        //To show comparison for bubble sort
+        //To show comparisons for selection sort
         if(btnPlayA.disabled==true){
-            if(this.index == pass + 1)
-                c.fillStyle = "red"; 
-            else if (this.index == pass + 2)
-                c.fillStyle = "green";
+            if(this.index == current )
+                c.fillStyle = "green"; 
+            else if (this.index == minIndex)
+                c.fillStyle = "blue";
+            else if (this.index == pass)
+                c.fillStyle = "orange";
         }
         
         c.fillRect(this.x , this.y , this.xl , this.yl);
@@ -89,9 +87,11 @@ function reset(){
     aArraySize = 10;
     aArrayType = "random";
 
-    //Related to bubble sort algorithm
+    //Related to selection sort algorithm
     pass = 0;
-    cIndex = 0;
+    current = 0;
+    min = aArray[0];
+    minIndex = 0;
 
     unitx = lengthx/aArraySize;
     setArray();
@@ -104,7 +104,10 @@ function reset(){
 
 //Function for Size of List toggle
 function setListSize(size){
-    pass = 0; 
+    pass = 0;
+    current = 0;
+    min = aArray[0];
+    minIndex = 0;
     btnSize10.parentElement.className = otherBtnCN;
     btnSize25.parentElement.className = otherBtnCN;
     btnSize50.parentElement.className = otherBtnCN;
@@ -119,15 +122,16 @@ function setListSize(size){
         btnSize10.parentElement.className = selctedBtnCN;
     }
     aArraySize = size;
-    cIndex = 0;
     unitx = lengthx/size;
     setArray();
 }
 //Function for tyoe of List toggle
 function setListType(type_number){
-    //Related to bubble sort algo
+    //Related to selection sort algo
     pass = 0;
-    cIndex = 0;
+    current = 0;
+    min = aArray[0];
+    minIndex = 0;
 
     type = "random";
     if(type_number == 2)
@@ -170,6 +174,10 @@ function setArray(){
             aArray.push(i*m);
         }
     }
+    pass = 0;
+    current = 0;
+    min = aArray[0];
+    minIndex = 0;
     setObjectArray();
     drawObjectArray();
 }
@@ -191,33 +199,33 @@ function drawObjectArray(){
 }
 
 //Function to animate bubble sort
+
 function sortAnimate(){
     
     requestID = requestAnimationFrame(sortAnimate);
-    if(pass >= aArraySize - 1 - cIndex){
-        pass = 0;
-        counter = 0;
-        cIndex++;
-    }
-    if(aArray[pass] > aArray[pass + 1]){
-        //array updated
-        var temp = aArray[pass];
-        aArray[pass] = aArray[pass+1];
-        aArray[pass+1] = temp;
-    }
-    else{
-        counter++;
-    }
-    if(counter >= aArraySize-1-cIndex){
+
+    if(pass >= aArraySize){
         pauseA();
-    }
-    setObjectArray();
-        c.clearRect(0,0,1200,600);
-        for(var i = 0 ; i < aArraySize ; i++){
-            oArray[i].draw();
+    } else if (current >= aArraySize){
+        var temp = aArray[minIndex];
+        aArray[minIndex] = aArray[pass];
+        aArray[pass] = temp;
+        setObjectArray();
+        pass++;
+        current = pass;
+        min = aArray[pass];
+        minIndex = pass;
+    } else {
+        if(aArray[current]<min){
+            min = aArray[current];
+            minIndex = current;
         }
-    
-    pass++;
+        current++;
+    }
+    c.clearRect(0,0,1200,600);
+    for(var i = 0 ; i < aArraySize ; i++){
+        oArray[i].draw();
+    }
 }
 
 
@@ -244,7 +252,6 @@ function resetBtns(){
 //Function for controls
 //For play
 btnPlayA.addEventListener("click",(e) => {
-    counter = 0;
     sortAnimate();
     //sort();
     //Button disabled to stop multiple call of sortAndDraw()
@@ -275,6 +282,11 @@ btnPauseA.addEventListener("click",(e) => {
     btnTypeR.disabled = false;
     btnTypeSW.disabled = false;
     btnTypeS.disabled = false;
+
+    //related to selection sort
+    current = pass;
+    min = aArray[current];
+    minIndex = current;
 });
 
 //For reset
@@ -287,7 +299,7 @@ btnResetA.addEventListener("click",(e) => {
 
 function pauseA(){
     cancelAnimationFrame(requestID);
-    console.log("paused");
+    console.log("pauseeeeeeed");
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     //resetBtns();
@@ -303,8 +315,9 @@ function pauseA(){
 
 
     pass = 0;
-    cIndex = 0;
-    counter = 0;
+    current = 0;
+    min = aArray[0];
+    minIndex = 0;
 }
 
 
