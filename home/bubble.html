@@ -40,6 +40,23 @@
                             This is one of the simplest sorting algorithms. This algorithm looks at the first two elements of the list and swaps them if they are in wrong order, after this it looks at the second and third elements of the list and swaps them if they are in wrong order and this process goes on for the whole list. This  is one pass through which results in the smallest or the largest element to reach the end of the list depending on whether we are sorting in ascending or descending order. Repeated pass throughs are done till the whole list is sorted. The smaller or larger elements seem to “bubble” to the top of the list.
                         </p>
                     </div>
+                    <div class = "row mContainer">
+                        <code>
+                            procedure bubbleSort(A : list of sortable items)<br/>
+                                n := length(A)<br/>
+                                repeat<br/>
+                                    swapped := false<br/>
+                                    for i := 1 to n - 1 inclusive do<br/>
+                                        if A[i - 1] > A[i] then<br/>
+                                            swap(A[i - 1], A[i])<br/>
+                                            swapped = true<br/>
+                                        end if<br/>
+                                    end for<br/>
+                                    n := n - 1<br/>
+                                until not swapped<br/>
+                            end procedure<br/>
+                        </code>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <p class="h3">Time Complexity <br/></p>

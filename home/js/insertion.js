@@ -47,10 +47,8 @@ var aArraySize = 10;
 var aArrayType = "random";
 setArray();
 
-//Related to bubble sort
-var pass = 0;
-var cIndex = 0;
-var counter = 0;
+//Related to insertion sort
+var pass = 1;
 
 //Variables for animation frames;
 var requestID = "";
@@ -69,12 +67,14 @@ function Block(index , value , x , y ){
         c.fillStyle = "yellow";
 
         //To show comparison for bubble sort
+        /*
         if(btnPlayA.disabled==true){
             if(this.index == pass + 1)
                 c.fillStyle = "red"; 
             else if (this.index == pass + 2)
                 c.fillStyle = "green";
         }
+        */
         
         c.fillRect(this.x , this.y , this.xl , this.yl);
         c.fillStyle = "blue";
@@ -90,8 +90,7 @@ function reset(){
     aArrayType = "random";
 
     //Related to bubble sort algorithm
-    pass = 0;
-    cIndex = 0;
+    pass = 1;
 
     unitx = lengthx/aArraySize;
     setArray();
@@ -104,7 +103,7 @@ function reset(){
 
 //Function for Size of List toggle
 function setListSize(size){
-    pass = 0; 
+    pass = 1; 
     btnSize10.parentElement.className = otherBtnCN;
     btnSize25.parentElement.className = otherBtnCN;
     btnSize50.parentElement.className = otherBtnCN;
@@ -119,15 +118,13 @@ function setListSize(size){
         btnSize10.parentElement.className = selctedBtnCN;
     }
     aArraySize = size;
-    cIndex = 0;
     unitx = lengthx/size;
     setArray();
 }
 //Function for tyoe of List toggle
 function setListType(type_number){
     //Related to bubble sort algo
-    pass = 0;
-    cIndex = 0;
+    pass = 1;
 
     type = "random";
     if(type_number == 2)
@@ -191,6 +188,7 @@ function drawObjectArray(){
 }
 
 //Function to animate bubble sort
+/*
 function sortAnimate(){
     
     requestID = requestAnimationFrame(sortAnimate);
@@ -219,7 +217,7 @@ function sortAnimate(){
     
     pass++;
 }
-
+*/
 
 //Function to reset btns
 function resetBtns(){
@@ -244,7 +242,6 @@ function resetBtns(){
 //Function for controls
 //For play
 btnPlayA.addEventListener("click",(e) => {
-    counter = 0;
     sortAnimate();
     //sort();
     //Button disabled to stop multiple call of sortAndDraw()
@@ -302,9 +299,7 @@ function pauseA(){
     btnTypeS.disabled = false;
 
 
-    pass = 0;
-    cIndex = 0;
-    counter = 0;
+    pass = 1;
 }
 
 
