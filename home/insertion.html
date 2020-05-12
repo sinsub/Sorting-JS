@@ -13,18 +13,18 @@
 
 <body>
     <div class="container-fluid">
-        <div class="row border border-primary">
+        <div class="row mContainer border border-primary">
             <nav class="nav">
                 <a class="nav-link active" href="../index.html">Home</a>
                 <a class="nav-link" href="../analyse.html">Compare/Analyse</a>
             </nav>
         </div>
 
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-sm-auto border">
                 <nav class="nav flex-column">
                     <a class="nav-link" href="bubble.html">Bubble Sort</a>
-                    <a class="nav-link active" href="insertion.html">Insertion Sort</a>
+                    <a class="nav-link active" href="insertion.html"><strong>Insertion Sort</strong></a>
                     <a class="nav-link" href="selection.html">Selection Sort</a>
                     <a class="nav-link" href="merge.html">Merge Sort</a>
                     <a class="nav-link" href="quick.html">Quick Sort</a>
@@ -37,29 +37,25 @@
                     </div>
                     <div class="row" id="a">
                         <p class="lead">
-                            CHANGE This is one of the simplest sorting algorithms. This algorithm looks at the first two elements of the list and swaps them if they are in wrong order, after this it looks at the second and third elements of the list and swaps them if they are in wrong order and this process goes on for the whole list. This  is one pass through which results in the smallest or the largest element to reach the end of the list depending on whether we are sorting in ascending or descending order. Repeated pass throughs are done till the whole list is sorted. The smaller or larger elements seem to “bubble” to the top of the list.
+                            Insertion sort is a simple sorting algorithm. We start checking from the second number in the list and place it before the first number if it is smaller than the first number (Considering we are sorting in ascending order). Then we move to the next number and “insert” it into the position which makes this sub-list of length 3 sorted. Then we move to the next number and insert it into position in the same manner which makes this sub-list sorted. We continue this process till we reach the last element and insert it into the position and we end up with a sorted list.                        
                         </p>
                     </div>
                     <div class = "row mContainer">
-                        <code> CHANGE
-                            procedure bubbleSort(A : list of sortable items)<br/>
-                                n := length(A)<br/>
-                                repeat<br/>
-                                    swapped := false<br/>
-                                    for i := 1 to n - 1 inclusive do<br/>
-                                        if A[i - 1] > A[i] then<br/>
-                                            swap(A[i - 1], A[i])<br/>
-                                            swapped = true<br/>
-                                        end if<br/>
-                                    end for<br/>
-                                    n := n - 1<br/>
-                                until not swapped<br/>
-                            end procedure<br/>
+                        <code> 
+                            i ← 1<br/>
+                            while i < length(A)<br/>
+                                j ← i<br/>
+                                while j > 0 and A[j-1] > A[j]<br/>
+                                    swap A[j] and A[j-1]<br/>
+                                    j ← j - 1<br/>
+                                end while<br/>
+                                i ← i + 1<br/>
+                            end while<br/>
                         </code>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <p class="h3">Time Complexity CHANGE<br/></p>
+                            <p class="h3">Time Complexity <br/></p>
                         </div>
                         <div class="col"><p class="lead">Worst Case: n<sup>2</sup></p></div>
                         <div class="col"><p class="lead">Average Case: n<sup>2</sup></p></div>

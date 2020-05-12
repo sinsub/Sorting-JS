@@ -11,9 +11,9 @@ canvas.width = canvasWidth
 canvas.height = canvasHeight;
 var c = canvas.getContext("2d");
 //Constants for canvas
-const startx = 100;
+const startx = 50;
 const starty = 500;
-const lengthx = 1000;
+var lengthx = 900;
 const lengthy = 5;
 //Variable for canvas
 var tUnitx = (lengthx)/10;
@@ -49,6 +49,7 @@ setArray();
 
 //Related to insertion sort
 var pass = 1;
+var current = 1;
 
 //Variables for animation frames;
 var requestID = "";
@@ -66,15 +67,16 @@ function Block(index , value , x , y ){
         c.beginPath();
         c.fillStyle = "yellow";
 
-        //To show comparison for bubble sort
-        /*
+        //To show comparisons for insertion sort
+
         if(btnPlayA.disabled==true){
-            if(this.index == pass + 1)
-                c.fillStyle = "red"; 
-            else if (this.index == pass + 2)
+            if(this.index == current )
+                c.fillStyle = "blue"; 
+            else if (this.index == current - 1)
                 c.fillStyle = "green";
+            else if (this.index == pass)
+                c.fillStyle = "orange";
         }
-        */
         
         c.fillRect(this.x , this.y , this.xl , this.yl);
         c.fillStyle = "blue";
@@ -89,8 +91,9 @@ function reset(){
     aArraySize = 10;
     aArrayType = "random";
 
-    //Related to bubble sort algorithm
+    //Related to insetion sort algorithm
     pass = 1;
+    current = 1
 
     unitx = lengthx/aArraySize;
     setArray();
@@ -104,6 +107,7 @@ function reset(){
 //Function for Size of List toggle
 function setListSize(size){
     pass = 1; 
+    current = 1;
     btnSize10.parentElement.className = otherBtnCN;
     btnSize25.parentElement.className = otherBtnCN;
     btnSize50.parentElement.className = otherBtnCN;
@@ -125,6 +129,7 @@ function setListSize(size){
 function setListType(type_number){
     //Related to bubble sort algo
     pass = 1;
+    current = 1;
 
     type = "random";
     if(type_number == 2)
@@ -188,32 +193,76 @@ function drawObjectArray(){
 }
 
 //Function to animate bubble sort
+function sortAnimate(){
+    
+    requestID = requestAnimationFrame(sortAnimate);
+    if(pass > aArraySize - 1){
+        pass = 1;
+        current = pass;
+        pauseA();
+    }else if(current == 0){
+        pass++;
+        current = pass;
+    } else {
+        if(aArray[current]<aArray[current-1]){
+            //swap
+            var temp = aArray[current];
+            aArray[current] = aArray[current-1];
+            aArray[current-1] = temp;
+            //update Object Array
+            setObjectArray();
+            current--;
+        }
+        else {
+            pass++;
+            current = pass;
+        }
+    } 
+    
+    //update object array:
+    //setObjectArray();
+    //Draw the updated array
+    c.clearRect(0,0,1200,600);
+    for(var i = 0 ; i < aArraySize ; i++){
+        oArray[i].draw();
+    }
+    
+    
+}
+
+
+
+
 /*
 function sortAnimate(){
     
     requestID = requestAnimationFrame(sortAnimate);
-    if(pass >= aArraySize - 1 - cIndex){
-        pass = 0;
-        counter = 0;
-        cIndex++;
-    }
-    if(aArray[pass] > aArray[pass + 1]){
-        //array updated
-        var temp = aArray[pass];
-        aArray[pass] = aArray[pass+1];
-        aArray[pass+1] = temp;
-    }
-    else{
-        counter++;
-    }
-    if(counter >= aArraySize-1-cIndex){
+    if(pass > aArraySize - 1){
+        pass = 1;
         pauseA();
     }
-    setObjectArray();
+    var current = pass;
+    for(var j = pass ; j >= 1 ; j--){
+        current = j;
         c.clearRect(0,0,1200,600);
         for(var i = 0 ; i < aArraySize ; i++){
             oArray[i].draw();
         }
+        if(aArray[j] < aArray[j-1]){
+            var temp = aArray[j];
+            aArray[j] = aArray[j-1];
+            aArray[j-1] = temp;
+        } else {
+            break;
+        }
+    }    
+    //update object array:
+    setObjectArray();
+    //Draw the updated array
+    c.clearRect(0,0,1200,600);
+    for(var i = 0 ; i < aArraySize ; i++){
+        oArray[i].draw();
+    }
     
     pass++;
 }
@@ -300,6 +349,7 @@ function pauseA(){
 
 
     pass = 1;
+    current = pass;
 }
 
 
