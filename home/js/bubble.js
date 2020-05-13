@@ -1,24 +1,60 @@
-
-
 //Div that contains the canvas:
 var canvasContainer = document.getElementById("a");
 
 //Canvas for animation :
 var canvas = document.querySelector('canvas');
-const canvasWidth  = 1200;
-const canvasHeight = 500; 
-canvas.width = canvasWidth
-canvas.height = canvasHeight;
-var c = canvas.getContext("2d");
 //Constants for canvas
-const startx = 50;
-const starty = 400;
-const lengthx = 1000;
-const lengthy = 5;
+var startx = 0;
+var starty = 0;
+var lengthx = 0;
+var lengthy = 0;
+//for resizability
+var c = canvas.getContext("2d");
+const maxCanvasW = 1100;
+const canvasHeight = 500;
+
+if(window.innerWidth >= 1100){
+    canvas.width = maxCanvasW
+    canvas.height = canvasHeight;
+     startx = 50;
+     starty = 400;
+     lengthx = 1000;
+
+}
+else {
+    canvas.width = window.innerWidth;
+    canvas.height = canvasHeight;
+     startx = 25;
+     starty = 400;
+     lengthx = window.innerWidth - 100;
+}
 //Variable for canvas
 var tUnitx = (lengthx)/10;
 var unitx = tUnitx;
 const unity = 3;  
+
+window.addEventListener("resize", (e) => {
+    if(window.innerWidth >= 1200){
+        canvas.width = maxCanvasW
+        canvas.height = canvasHeight;
+         startx = 50;
+         starty = 400;
+         lengthx = 1000;
+    
+    }
+    else {
+        canvas.width = window.innerWidth;
+        canvas.height = canvasHeight;
+         startx = 25;
+         starty = 400;
+         lengthx = window.innerWidth - 100;
+    }
+    tUnitx = (lengthx)/aArraySize;
+    unitx = tUnitx;
+    setObjectArray();
+    drawObjectArray();
+});
+  
 
 //Buttons for animations
 //Size of list
