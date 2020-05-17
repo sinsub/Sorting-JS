@@ -113,17 +113,23 @@
                     </div>    
                     <div class = "row mContainer">
                         <code>
-                                n := length(A)<br/>
-                                repeat<br/>
-                                    swapped := false<br/>
-                                    for i := 1 to n - 1 inclusive do<br/>
-                                        if A[i - 1] > A[i] then<br/>
-                                            swap(A[i - 1], A[i])<br/>
-                                            swapped = true<br/>
-                                        end if<br/>
-                                    end for<br/>
-                                    n := n - 1<br/>
-                                until not swapped<br/>
+                            //Simple implementation<br/>
+                            function selection_sort( List A ){<br/>
+                            &nbsp; n = A.length;<br/>
+                            &nbsp; for(i = 0; i < n; i++){<br/>
+                            &nbsp;&nbsp; min = i;<br/>
+                            &nbsp;&nbsp; fot(j = i+1; j<n; j++){<br/>
+                            &nbsp;&nbsp;&nbsp; if(A[j] < A[min]){<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp; min = j;<br/>
+                            &nbsp;&nbsp;&nbsp; }<br/>
+                            &nbsp;&nbsp;&nbsp; temp = A[i];<br/>
+                            &nbsp;&nbsp;&nbsp; A[i] = A[min];<br/>
+                            &nbsp;&nbsp;&nbsp; A[min] = temp;<br/>
+                            &nbsp;&nbsp; }<br/>
+                            &nbsp; }<br/>
+                            &nbsp; return A;<br/>
+                            }<br/>
+                            
                         </code>
                     </div>      
                 </div>

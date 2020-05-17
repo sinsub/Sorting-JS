@@ -111,15 +111,21 @@
                     </div>    
                     <div class = "row mContainer">
                         <code> 
-                            i ← 1<br/>
-                            while i < length(A)<br/>
-                                j ← i<br/>
-                                while j > 0 and A[j-1] > A[j]<br/>
-                                    swap A[j] and A[j-1]<br/>
-                                    j ← j - 1<br/>
-                                end while<br/>
-                                i ← i + 1<br/>
-                            end while<br/>
+                            //Simple implementation<br/>
+                            function insertion_sort( List A ){<br/>
+                            &nbsp; n = A.length;<br/>
+                            &nbsp; for(i = 1; i < n; i++){<br/>
+                            &nbsp; &nbsp; num = A[i];<br/>
+                            &nbsp; &nbsp; j = i - 1;<br/>
+                            &nbsp; &nbsp; while(j >= 0 && A[j] > key){<br/>
+                            &nbsp; &nbsp; &nbsp; A[j+1]  = A[j];<br/>
+                            &nbsp; &nbsp; &nbsp; j = j - 1;<br/>
+                            &nbsp; &nbsp; }<br/>
+                            &nbsp; &nbsp; A[j+1] = num;<br/>
+                            &nbsp;}<br/>
+                            &nbsp; return A;<br/> 
+                            }<br/>
+
                         </code>
                     </div>      
                 </div>

@@ -112,17 +112,27 @@
                     </div>    
                     <div class = "row mContainer">
                         <code>
-                                n := length(A)<br/>
-                                repeat<br/>
-                                    swapped := false<br/>
-                                    for i := 1 to n - 1 inclusive do<br/>
-                                        if A[i - 1] > A[i] then<br/>
-                                            swap(A[i - 1], A[i])<br/>
-                                            swapped = true<br/>
-                                        end if<br/>
-                                    end for<br/>
-                                    n := n - 1<br/>
-                                until not swapped<br/>
+                            //Simple Implementation<br/>
+                            function bubble_sort( List A ) {<br/>
+                          &nbsp;n = A.length;<br/>
+                          &nbsp;for(i = 0; i < n-1; i++){<br/>
+                        &nbsp;&nbsp;swapperd = false;<br/>
+                        &nbsp;&nbsp;for(j = 0; j < n-1- i; j++){<br/>
+                    &nbsp;&nbsp;&nbsp;if(A[j] > A [j+1]){<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;temp = A[j];<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;A[j] = A[j+1];<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;A[j+1] = temp;<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;swapped = true; <br/>
+                       &nbsp;&nbsp;&nbsp;}<br/>
+                        &nbsp;&nbsp;}<br/> 
+                        &nbsp;&nbsp;if(swapped == false){<br/>
+                        &nbsp;&nbsp;&nbsp;break;<br/>
+                        &nbsp;&nbsp;}<br/>
+                          &nbsp;}<br/>
+                          &nbsp;return A;<br/>
+                            }<br/>
+                            
+                            
                         </code>
                     </div>      
                 </div>
