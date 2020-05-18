@@ -1,5 +1,5 @@
 //Div that contains the canvas:
-var canvasContainer = document.getElementById("a");
+var canvasContainer = document.getElementById("canvas_container");
 
 //Canvas for animation :
 var canvas = document.querySelector('canvas');
@@ -7,50 +7,45 @@ var canvas = document.querySelector('canvas');
 var startx = 0;
 var starty = 0;
 var lengthx = 0;
-var lengthy = 0;
 //for resizability
 var c = canvas.getContext("2d");
-const maxCanvasW = 1100;
 const canvasHeight = 500;
 
 if(window.innerWidth >= 1100){
-    canvas.width = maxCanvasW
+    canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
-     startx = 50;
-     starty = 400;
-     lengthx = 1000;
+    startx = 50;
+    starty = 400;
+    lengthx = canvasContainer.clientWidth-100;
 
 }
 else {
-    canvas.width = window.innerWidth;
+    canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
-     startx = 25;
-     starty = 400;
-     lengthx = window.innerWidth - 100;
+    startx = 25;
+    starty = 400;
+    lengthx = canvasContainer.clientWidth-50;
 }
 //Variable for canvas
-var tUnitx = (lengthx)/10;
-var unitx = tUnitx;
+var unitx = (lengthx)/10;
 const unity = 3;  
 
 window.addEventListener("resize", (e) => {
     if(window.innerWidth >= 1200){
-        canvas.width = maxCanvasW
+        canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
-         startx = 50;
-         starty = 400;
-         lengthx = 1000;
-    
+        startx = 50;
+        starty = 400;
+        lengthx = canvasContainer.clientWidth-100;
     }
     else {
-        canvas.width = window.innerWidth;
+        canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
-         startx = 25;
-         starty = 400;
-         lengthx = window.innerWidth - 100;
+        startx = 25;
+        starty = 400;
+        lengthx = canvasContainer.clientWidth-50;
     }
-    tUnitx = (lengthx)/aArraySize;
-    unitx = tUnitx;
+    unitx = (lengthx)/aArraySize;
     setObjectArray();
     drawObjectArray();
 });
@@ -103,16 +98,17 @@ function Block(index , value , x , y ){
     
     this.draw = function(){
         c.beginPath();
-        c.fillStyle = "yellow";
+        //default colour
+        c.fillStyle = "rgb(211, 228, 235)";
 
         //To show comparisons for selection sort
         if(btnPlayA.disabled==true){
             if(this.index == current )
                 c.fillStyle = "green"; 
             else if (this.index == minIndex)
-                c.fillStyle = "blue";
+                c.fillStyle = "purple";
             else if (this.index == pass)
-                c.fillStyle = "orange";
+                c.fillStyle = "violet";
         }
         
         c.fillRect(this.x , this.y , this.xl , this.yl);
@@ -233,7 +229,7 @@ function setObjectArray(){
 
 //Draw objects whenever reset
 function drawObjectArray(){
-    c.clearRect(0 , 0 , 1200 , 600);
+    c.clearRect(0 , 0 , canvas.width , canvas.height);
     for(var i = 0 ; i < aArraySize ; i++){
         oArray[i].draw();
     }
@@ -263,7 +259,7 @@ function sortAnimate(){
         }
         current++;
     }
-    c.clearRect(0,0,1200,600);
+    c.clearRect(0 , 0 , canvas.width , canvas.height);
     for(var i = 0 ; i < aArraySize ; i++){
         oArray[i].draw();
     }
