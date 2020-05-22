@@ -33,21 +33,20 @@
             <div class="col-xl-10 border">
                 <div class="container-fluid" id = "main_container">
                     <div class="row mContainer">
-                        <p class="h1">Merge sort------Actually Bubble Sort</p>
+                        <p class="h1">Merge sort</p>
                     </div>
                     <div class="row mContainer">
                         <p class="lead">
-                            This is one of the simplest sorting algorithms. This algorithm looks at the first two elements of the list and swaps them if they are in wrong order, after this it looks at the second and third elements of the list and swaps them if they are in wrong order and this process goes on for the whole list. This  is one pass through which results in the smallest or the largest element to reach the end of the list depending on whether we are sorting in ascending or descending order. Repeated pass throughs are done till the whole list is sorted. The smaller or larger elements seem to “bubble” to the top of the list.
-                        </p>
+                            Merge sort is a divide and conquer algorithm which divides the input list into two halves and calls merge sort on them and merges the returned lists to end up with a sorted list. The division results in n lists containing one number each. The first two of these lists are merged such that the resulting list containing two elements is a sorted list. The next two single element lists are merged into a sorted list of length two. Now these two lists of length two are merged resulting in a sorted list of length four. Same process occurs for the next four elements and now we get two sorted lists of length four which are merged to get a sorted list of length. This process continues till the whole list is merged into a sorted list.                        </p>
                     </div>
                     
                     <div class="row">
                         <div class="col">
                             <p class="h3">Time Complexity <br/></p>
                         </div>
-                        <div class="col"><p class="lead">Worst Case: O(n<sup>2</sup>)</p></div>
-                        <div class="col"><p class="lead">Average Case: O(n<sup>2</sup>)</p></div>
-                        <div class="col"><p class="lead">Best Case: O(n)</p></div>
+                        <div class="col"><p class="lead">Worst Case: O(nlog(n))</p></div>
+                        <div class="col"><p class="lead">Average Case: O(nlog(n))</p></div>
+                        <div class="col"><p class="lead">Best Case: O(nlog(n))</p></div>
                     </div>
                     <div class="row">
                         <div class = "col">
@@ -113,26 +112,19 @@
                     <div class = "row mContainer">
                         <code>
                             //Simple Implementation<br/>
-                            function bubble_sort( List A ) {<br/>
-                          &nbsp;n = A.length;<br/>
-                          &nbsp;for(i = 0; i < n-1; i++){<br/>
-                        &nbsp;&nbsp;swapperd = false;<br/>
-                        &nbsp;&nbsp;for(j = 0; j < n-1- i; j++){<br/>
-                    &nbsp;&nbsp;&nbsp;if(A[j] > A [j+1]){<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;temp = A[j];<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;A[j] = A[j+1];<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;A[j+1] = temp;<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;swapped = true; <br/>
-                       &nbsp;&nbsp;&nbsp;}<br/>
-                        &nbsp;&nbsp;}<br/> 
-                        &nbsp;&nbsp;if(swapped == false){<br/>
-                        &nbsp;&nbsp;&nbsp;break;<br/>
-                        &nbsp;&nbsp;}<br/>
-                          &nbsp;}<br/>
-                          &nbsp;return A;<br/>
-                            }<br/>
-                            
-                            
+                            function MergeSort( List A ){<br/>
+                                &nbsp; if (A.length > 1) {<br/>
+                                    &nbsp;&nbsp;List A1 = List A<0 to (A.length)/2>;<br/>
+                                    &nbsp;&nbsp;List A2 = List A<((A.length)/2 + 1 ) to A.length>;<br/>
+                                    &nbsp;&nbsp;A1 = MergeSort( A1 );<br/>
+                                    &nbsp;&nbsp;A2 = MergeSort( A2 );<br/>
+                                    &nbsp;&nbsp;return merge( A1 , A2 );<br/>
+                                    &nbsp;} else {<br/>
+                                    &nbsp;&nbsp;return A;<br/>
+                                    &nbsp;}<br/>
+                                    
+                                }<br/>
+                                
                         </code>
                     </div>      
                 </div>
