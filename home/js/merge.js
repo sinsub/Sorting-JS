@@ -77,8 +77,9 @@ btnPauseA.disabled = true;
 const selctedBtnCN = "btn btn-success active";
 const otherBtnCN = "btn btn-success";
 
-var pArray = [];
+
 //Array to be animated 
+var pArray = [];
 //Array contaning the numbers
 var aArray = [];
 //Array contaning objects to be drawn
@@ -89,7 +90,7 @@ var aArraySize = 10;
 var aArrayType = "random";
 setArray();
 
-//Related to bubble sort
+//Related to merge sort animation
 var pass = 0;
 
 
@@ -109,17 +110,20 @@ function Block(index , value , x , y ){
     this.draw = function(){
         c.beginPath();
         //default colour
-        c.fillStyle = "rgb(211, 228, 235)";
-        //To show comparison for bubble sort
+        c.fillStyle = "#59C0F0";
+
         if(btnPlayA.disabled==true){
             if(this.index >= (pArray[pass]).l && this.index < (pArray[pass]).s1){
-                c.fillStyle = "pink";
+                c.fillStyle = "#4FF8D2";
             }
-            else if(this.index >= (pArray[pass]).s1 && this.index < (pArray[pass]).s2){
-                c.fillStyle = "violet";
+            else if(this.index > (pArray[pass]).s1 && this.index < (pArray[pass]).s2){
+                c.fillStyle = "#4583D9";
             }
-            else if(this.index >= (pArray[pass]).s2 && this.index <= (pArray[pass]).r){
-                c.fillStyle = "orange";
+            else if(this.index > (pArray[pass]).s2 && this.index <= (pArray[pass]).r){
+                c.fillStyle = "#45D1D9";
+            }
+            else if(this.index == (pArray[pass]).s1 || this.index == (pArray[pass]).s2){
+                c.fillStyle = "#4F6AF8";
             }
         }
         
@@ -136,7 +140,7 @@ function reset(){
     aArraySize = 10;
     aArrayType = "random";
 
-    //Related to bubble sort algorithm
+    //Related to merge sort animation
     pass = 0;
 
     unitx = lengthx/aArraySize;
@@ -150,6 +154,7 @@ function reset(){
 
 //Function for Size of List toggle
 function setListSize(size){
+    //Related to merge sort animation
     pass = 0; 
     btnSize10.parentElement.className = otherBtnCN;
     btnSize25.parentElement.className = otherBtnCN;
@@ -170,7 +175,6 @@ function setListSize(size){
 }
 //Function for tyoe of List toggle
 function setListType(type_number){
-    //Related to bubble sort algo
     pass = 0;
 
     type = "random";
@@ -197,7 +201,6 @@ function setListType(type_number){
 
 //Function to set the Array for animation;
 function setArray(){
-    sorted = false;
     aArray = [];
     var m = (100/aArraySize);
     if(aArrayType == "random"){
@@ -217,7 +220,6 @@ function setArray(){
     }
     setObjectArray();
     drawObjectArray();
-    pArray = [];
     setpArray();
 }
 
@@ -237,11 +239,14 @@ function drawObjectArray(){
     }
 }
 
+//Array contaning every* state when going through merge sort
+//Takes up alot of memory Find better way
 function setpArray(){
     pArray = [];
     merge(aArray , 0 ,aArraySize-1 , aArraySize);
 }
 
+//Merge Sort
 function merge(arr , l , r , n){
     if(l < r){
         //System.out.println("1st if");
@@ -256,6 +261,15 @@ function merge(arr , l , r , n){
         var n2 = r - m;
         var i = 0 , j = 0;
         while(i < n1 && j < n2){
+            var animate = {
+                changed: false, 
+                l: l,
+                s1: s1+i,
+                s2: s2+j,
+                r: r,
+                x: undefined
+            };
+
             if(arr[s1+i] <= arr[s2+j]){
                 i++;
             }
@@ -265,49 +279,73 @@ function merge(arr , l , r , n){
                     var temp = arr[s];
                     arr[s] = arr[s-1];
                     arr[s-1] = temp;
-                    //System.out.println("swapped");
                 }
                 s1++;
-                //s2++;
                 j++;
                 var temp = [];
                 for(var g = 0 ; g < aArraySize ; g++){
                     temp.push(arr[g]);
                 }
-                var anime = {
-                    x: temp,
-                    l: l,
-                    s1: s1+i,
-                    s2: s2+j,
-                    r: r
-                };
-                pArray.push(anime);
+                animate.changed = true;
+                animate.x = temp;
             }
+            pArray.push(animate);
         }
     }
 }
 
 //Function to animate bubble sort
 function sortAnimate(){
-    console.log("a");
     requestID = requestAnimationFrame(sortAnimate);
     if(pass < pArray.length){
-        aArray = (pArray[pass]).x;
-        setObjectArray();
+        if((pArray[pass]).changed){
+            aArray = (pArray[pass]).x;
+            setObjectArray();
+        }
         c.clearRect(0 , 0 , canvas.width , canvas.height);
         for(var i = 0 ; i < aArraySize ; i++){
             oArray[i].draw();
         }
-        
         pass++;
     }
-    else{
+    else {
         pauseA();
     }
+}
 
+//Function for controls
+//For play
+btnPlayA.addEventListener("click",(e) => {
+    btnsAfterPlay();
+    sortAnimate();
+});
+
+//For pause
+btnPauseA.addEventListener("click",(e) => {
+    btnsAfterPause();
+    cancelAnimationFrame(requestID);
+    console.log("Paused");
+});
+
+//Auto pause on completion
+function pauseA(){
+    btnsAfterPause();
+    cancelAnimationFrame(requestID);
+    console.log("Auto Paused");
+
+    pass = 0;
+    drawObjectArray();
+    setpArray();
     
 }
 
+//For reset
+btnResetA.addEventListener("click",(e) => {
+    console.log("Reset : Animations request Cancled");
+    cancelAnimationFrame(requestID);
+    resetBtns();
+    reset();
+});
 
 //Function to reset btns
 function resetBtns(){
@@ -329,53 +367,9 @@ function resetBtns(){
     btnTypeS.parentElement.className = otherBtnCN;
 }
 
-//Function for controls
-//For play
-btnPlayA.addEventListener("click",(e) => {
 
-    sortAnimate();
-    //sort();
-    //Button disabled to stop multiple call of sortAndDraw()
-    btnPlayA.disabled = true;
-    btnPauseA.disabled = false;
-    btnSize10.disabled = true;
-    btnSize25.disabled = true;
-    btnSize50.disabled = true;
-    btnSize100.disabled = true;
-    btnTypeR.disabled = true;
-    btnTypeSW.disabled = true;
-    btnTypeS.disabled = true;
-});
 
-//For pause
-btnPauseA.addEventListener("click",(e) => {
-    cancelAnimationFrame(requestID);
-    console.log("pauseed");
-    btnPlayA.disabled = false;
-    btnPauseA.disabled = true;
-    //resetBtns();
-    btnPlayA.disabled = false;
-    btnPauseA.disabled = true;
-    btnSize10.disabled = false;
-    btnSize25.disabled = false;
-    btnSize50.disabled = false;
-    btnSize100.disabled = false;
-    btnTypeR.disabled = false;
-    btnTypeSW.disabled = false;
-    btnTypeS.disabled = false;
-});
-
-//For reset
-btnResetA.addEventListener("click",(e) => {
-    console.log("animation stopped");
-    cancelAnimationFrame(requestID);
-    resetBtns();
-    reset();
-});
-
-function pauseA(){
-    cancelAnimationFrame(requestID);
-    console.log("paused");
+function btnsAfterPause() {
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     //resetBtns();
@@ -389,14 +383,20 @@ function pauseA(){
     btnTypeSW.disabled = false;
     btnTypeS.disabled = false;
 
-
-    pass = 0;
-    drawObjectArray();
-    
 }
 
-
-
-
+function btnsAfterPlay() {
+         //Button disabled to stop multiple call of sortAndDraw()
+         btnPlayA.disabled = true;
+         btnPauseA.disabled = false;
+         btnSize10.disabled = true;
+         btnSize25.disabled = true;
+         btnSize50.disabled = true;
+         btnSize100.disabled = true;
+         btnTypeR.disabled = true;
+         btnTypeSW.disabled = true;
+         btnTypeS.disabled = true;
+    
+}
 
 

@@ -261,6 +261,44 @@ function sortAnimate(){
 }
 
 
+
+
+//Function for controls
+//For play
+btnPlayA.addEventListener("click",(e) => {
+    
+    btnsAfterPlay();
+
+    sortAnimate();
+    //sort();
+    
+});
+
+//For pause
+btnPauseA.addEventListener("click",(e) => {
+    cancelAnimationFrame(requestID);
+    console.log("pauseed");
+    btnsAfterPause();
+});
+
+//For reset
+btnResetA.addEventListener("click",(e) => {
+    console.log("animation stopped");
+    cancelAnimationFrame(requestID);
+    resetBtns();
+    reset();
+});
+
+function pauseA(){
+    cancelAnimationFrame(requestID);
+    console.log("paused");
+    btnsAfterPause();
+
+
+    pass = 1;
+    current = pass;
+}
+
 //Function to reset btns
 function resetBtns(){
     btnPlayA.disabled = false;
@@ -281,52 +319,7 @@ function resetBtns(){
     btnTypeS.parentElement.className = otherBtnCN;
 }
 
-//Function for controls
-//For play
-btnPlayA.addEventListener("click",(e) => {
-    sortAnimate();
-    //sort();
-    //Button disabled to stop multiple call of sortAndDraw()
-    btnPlayA.disabled = true;
-    btnPauseA.disabled = false;
-    btnSize10.disabled = true;
-    btnSize25.disabled = true;
-    btnSize50.disabled = true;
-    btnSize100.disabled = true;
-    btnTypeR.disabled = true;
-    btnTypeSW.disabled = true;
-    btnTypeS.disabled = true;
-});
-
-//For pause
-btnPauseA.addEventListener("click",(e) => {
-    cancelAnimationFrame(requestID);
-    console.log("pauseed");
-    btnPlayA.disabled = false;
-    btnPauseA.disabled = true;
-    //resetBtns();
-    btnPlayA.disabled = false;
-    btnPauseA.disabled = true;
-    btnSize10.disabled = false;
-    btnSize25.disabled = false;
-    btnSize50.disabled = false;
-    btnSize100.disabled = false;
-    btnTypeR.disabled = false;
-    btnTypeSW.disabled = false;
-    btnTypeS.disabled = false;
-});
-
-//For reset
-btnResetA.addEventListener("click",(e) => {
-    console.log("animation stopped");
-    cancelAnimationFrame(requestID);
-    resetBtns();
-    reset();
-});
-
-function pauseA(){
-    cancelAnimationFrame(requestID);
-    console.log("paused");
+function btnsAfterPause() {
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     //resetBtns();
@@ -340,13 +333,21 @@ function pauseA(){
     btnTypeSW.disabled = false;
     btnTypeS.disabled = false;
 
-
-    pass = 1;
-    current = pass;
 }
 
-
-
+function btnsAfterPlay() {
+         //Button disabled to stop multiple call of sortAndDraw()
+         btnPlayA.disabled = true;
+         btnPauseA.disabled = false;
+         btnSize10.disabled = true;
+         btnSize25.disabled = true;
+         btnSize50.disabled = true;
+         btnSize100.disabled = true;
+         btnTypeR.disabled = true;
+         btnTypeSW.disabled = true;
+         btnTypeS.disabled = true;
+    
+}
 
 
 
