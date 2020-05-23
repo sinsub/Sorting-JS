@@ -121,7 +121,7 @@ function Block(index , value , x , y ){
         }
         
         c.fillRect(this.x , this.y , this.xl , this.yl);
-        c.fillStyle = "blue";
+        c.strokeStyle = "blue";
         c.strokeRect(this.x , this.y , this.xl , this.yl)
     }
 }
