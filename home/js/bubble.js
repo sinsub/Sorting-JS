@@ -1,3 +1,8 @@
+//Main: #12D4E6
+//Diff1: #07E6B2
+//Diff2: #07F270
+//Main dark: #0763F2
+//Almost main: #08A8FC
 //Div that contains the canvas:
 var canvasContainer = document.getElementById("canvas_container");
 
@@ -109,15 +114,17 @@ function Block(index , value , x , y ){
     this.draw = function(){
         c.beginPath();
         //default colour
-        c.fillStyle = "rgb(211, 228, 235)";
+        c.fillStyle = "#12D4E6";
         //To show comparison for bubble sort
         if(btnPlayA.disabled==true){
-            if(this.index == pass + 1)
+            if(this.index < pass + 1)
+                c.fillStyle = "#08A8FC";
+            else if(this.index == pass + 1)
                 //c.fillStyle = "rgb(99, 142, 242)";
-                c.fillStyle = "violet"; 
+                c.fillStyle = "#08A8FC"; 
             else if (this.index == pass + 2)
                 //c.fillStyle = "rgb(23, 255, 108)";
-                c.fillStyle = "green";
+                c.fillStyle = "#07F270";
         }
         
         c.fillRect(this.x , this.y , this.xl , this.yl);

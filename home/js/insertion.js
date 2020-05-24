@@ -1,3 +1,8 @@
+//Main: #12D4E6
+//Diff1: #07E6B2
+//Diff2: #07F270
+//Main dark: #0763F2
+//Almost main: #08A8FC
 //Div that contains the canvas:
 var canvasContainer = document.getElementById("canvas_container");
 
@@ -97,17 +102,20 @@ function Block(index , value , x , y ){
     this.draw = function(){
         c.beginPath();
         //default colour
-        c.fillStyle = "rgb(211, 228, 235)";
+        c.fillStyle = "#12D4E6";
 
         //To show comparisons for insertion sort
 
         if(btnPlayA.disabled==true){
             if(this.index == current )
-                c.fillStyle = "violet"; 
+                c.fillStyle = "#07E6B2"; 
             else if (this.index == current - 1)
-                c.fillStyle = "green";
+                c.fillStyle = "#07F270";
             else if (this.index == pass)
-                c.fillStyle = "purple";
+                c.fillStyle = "#0763F2";
+            else if(this.index < pass){
+                c.fillStyle = "#08A8FC";
+            }
         }
         
         c.fillRect(this.x , this.y , this.xl , this.yl);

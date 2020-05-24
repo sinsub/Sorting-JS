@@ -1,8 +1,8 @@
-//Main: #8ED4E6
-//Diff1: #E6AC77
-//Diff2: #BEE683
-//Main dark: #D9A5E6
-//Almost main: #77CFE6
+//Main: #12D4E6
+//Diff1: #07E6B2
+//Diff2: #07F270
+//Main dark: #0763F2
+//Almost main: #08A8FC
 
 //Div that contains the canvas:
 var canvasContainer = document.getElementById("canvas_container");
@@ -116,14 +116,16 @@ function Block(index , value , x , y ){
     this.draw = function(){
         c.beginPath();
         //default colour
-        c.fillStyle = "#8ED4E6";
+        
+        c.fillStyle = "#12D4E6";
         if(btnPlayA.disabled==true){
             if(this.index >= (pArray[pass]).l && this.index < (pArray[pass]).r){
-                c.fillStyle = "#E6AC77";
+                c.fillStyle = "#08A8FC";
             } else if (this.index == (pArray[pass]).r){
-                c.fillStyle = "#D9A5E6";
-            } else if (this.index == (pArray[pass]).i || this.index == (pArray[pass]).j){
-                c.fillStyle = "#BEE683";
+                c.fillStyle = "#0763F2";
+            } 
+            if (this.index == (pArray[pass]).i || this.index == (pArray[pass]).j){
+                c.fillStyle = "#07F270";
             }
             
         }
