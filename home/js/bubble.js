@@ -16,13 +16,13 @@ var starty = 0;
 //Total length that the array representation occupies
 var lengthx = 0;
 //Constatnt height of the canvas
-const canvasHeight = 500;
+const canvasHeight = 425;
 
 if(window.innerWidth >= 1100){
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 50;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-100;
 
 }
@@ -30,7 +30,7 @@ else {
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 25;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-50;
 }
 //Variables for drawing the array representation
@@ -46,14 +46,14 @@ window.addEventListener("resize", (e) => {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 50;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-100;
     }
     else {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 25;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-50;
     }
     unitx = (lengthx)/aArraySize;

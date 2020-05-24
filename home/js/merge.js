@@ -1,3 +1,8 @@
+//Main: #12D4E6
+//Diff1: #07E6B2
+//Diff2: #07F270
+//Main dark: #0763F2
+//Almost main: #08A8FC
 //Div that contains the canvas:
 var canvasContainer = document.getElementById("canvas_container");
 
@@ -11,13 +16,13 @@ var starty = 0;
 //Total length that the array representation occupies
 var lengthx = 0;
 //Constatnt height of the canvas
-const canvasHeight = 500;
+const canvasHeight = 425;
 
 if(window.innerWidth >= 1100){
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 50;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-100;
 
 }
@@ -25,7 +30,7 @@ else {
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 25;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-50;
 }
 //Variables for drawing the array representation
@@ -41,14 +46,14 @@ window.addEventListener("resize", (e) => {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 50;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-100;
     }
     else {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 25;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-50;
     }
     unitx = (lengthx)/aArraySize;
@@ -110,20 +115,20 @@ function Block(index , value , x , y ){
     this.draw = function(){
         c.beginPath();
         //default colour
-        c.fillStyle = "#59C0F0";
+        c.fillStyle = "#12D4E6";
 
         if(btnPlayA.disabled==true){
             if(this.index >= (pArray[pass]).l && this.index < (pArray[pass]).s1){
-                c.fillStyle = "#4FF8D2";
+                c.fillStyle = "#08A8FC";
             }
             else if(this.index > (pArray[pass]).s1 && this.index < (pArray[pass]).s2){
-                c.fillStyle = "#4583D9";
+                c.fillStyle = "#07F270";
             }
             else if(this.index > (pArray[pass]).s2 && this.index <= (pArray[pass]).r){
-                c.fillStyle = "#45D1D9";
+                c.fillStyle = "#07E6B2";
             }
             else if(this.index == (pArray[pass]).s1 || this.index == (pArray[pass]).s2){
-                c.fillStyle = "#4F6AF8";
+                c.fillStyle = "#0763F2";
             }
         }
         

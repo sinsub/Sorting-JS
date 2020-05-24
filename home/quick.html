@@ -17,7 +17,7 @@
         <div class="row border border-primary mNav"> 
             <nav class="nav">
                 <a class="nav-link active lightText" href="../index.html">Home</a>
-                <a class="nav-link lightText" href="../analyse.html">Compare/Analyse</a>
+                <a class="nav-link lightText" href="https://github.com/subodh0201/Sorting-JS">GitHub Repository</a>
             </nav>
         </div>
         <div class="row justify-content-center">
@@ -37,8 +37,7 @@
                     </div>
                     <div class="row mContainer">
                         <p class="lead">
-                            This is one of the simplest sorting algorithms. This algorithm looks at the first two elements of the list and swaps them if they are in wrong order, after this it looks at the second and third elements of the list and swaps them if they are in wrong order and this process goes on for the whole list. This  is one pass through which results in the smallest or the largest element to reach the end of the list depending on whether we are sorting in ascending or descending order. Repeated pass throughs are done till the whole list is sorted. The smaller or larger elements seem to “bubble” to the top of the list.
-                        </p>
+                            Quick Sort is a divide and conquer algorithm which works by selecting a ‘pivot’ element and partitioning the list into two sublists such that one has elements less that the pivot and and the other contains elements greater than the pivot. The pivot is placed in between these two sublists and thus is where it should be in the final sorted list. Now quick sort is called on both the sublist. By the end of this recursive function the list is sorted.                        </p>
                     </div>
                     
                     <div class="row">
@@ -46,8 +45,8 @@
                             <p class="h4">Time Complexity <br/></p>
                         </div>
                         <div class="col"><p class="lead">Worst Case: O(n<sup>2</sup>)</p></div>
-                        <div class="col"><p class="lead">Average Case: O(n<sup>2</sup>)</p></div>
-                        <div class="col"><p class="lead">Best Case: O(n)</p></div>
+                        <div class="col"><p class="lead">Average Case: O(nlog(n))</p></div>
+                        <div class="col"><p class="lead">Best Case: O(nlog(n))</p></div>
                     </div>
                     <div class="row">
                         <div class = "col">
@@ -110,13 +109,16 @@
 
                         </canvas>
                     </div>    
-                    <div class = "row mContainer">
-                        <code>
-                            //Simple Implementation<br/>
-                        </code>
-                    </div>      
                 </div>
             </div>
+        </div>
+        <div class="row border border-primary mNav justify-content-end">
+            <nav class="nav">
+                <a class="nav-link active lightText" href="#">Home</a>
+                <a class="nav-link lightText" href="https://github.com/subodh0201/">GitHub</a>
+                <a class="nav-link lightText" href="https://www.linkedin.com/in/subodh-singh-2a4a491a6/">LinkedIn</a>
+                <a class="nav-link lightText" href="https://twitter.com/SubodhS60774509">Twitter</a>
+            </nav>
         </div>
     </div>
     <script src="js/quick.js"></script>

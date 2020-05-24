@@ -14,13 +14,13 @@ var starty = 0;
 var lengthx = 0;
 //for resizability
 var c = canvas.getContext("2d");
-const canvasHeight = 500;
+const canvasHeight = 425;
 
 if(window.innerWidth >= 1100){
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 50;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-100;
 
 }
@@ -28,7 +28,7 @@ else {
     canvas.width = canvasContainer.clientWidth;
     canvas.height = canvasHeight;
     startx = 25;
-    starty = 400;
+    starty = 375;
     lengthx = canvasContainer.clientWidth-50;
 }
 //Variable for canvas
@@ -40,14 +40,14 @@ window.addEventListener("resize", (e) => {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 50;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-100;
     }
     else {
         canvas.width = canvasContainer.clientWidth;
         canvas.height = canvasHeight;
         startx = 25;
-        starty = 400;
+        starty = 375;
         lengthx = canvasContainer.clientWidth-50;
     }
     unitx = (lengthx)/aArraySize;
