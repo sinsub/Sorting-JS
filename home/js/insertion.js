@@ -32,7 +32,7 @@ else {
     lengthx = canvasContainer.clientWidth-50;
 }
 //Variable for canvas
-var unitx = (lengthx)/10;
+var unitx = (lengthx)/25;
 const unity = 3;  
 
 window.addEventListener("resize", (e) => {
@@ -79,7 +79,7 @@ const otherBtnCN = "btn btn-success";
 //Array to be animated 
 var aArray = [];
 var oArray = [];
-var aArraySize = 10;
+var aArraySize = 25;
 var aArrayType = "random";
 setArray();
 
@@ -128,7 +128,7 @@ function Block(index , value , x , y ){
 function reset(){
     oArray = [];
     aArray = [];
-    aArraySize = 10;
+    aArraySize = 25;
     aArrayType = "random";
 
     //Related to insertion sort algorithm
@@ -312,9 +312,9 @@ function resetBtns(){
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     btnSize10.disabled = false;
-    btnSize10.parentElement.className = selctedBtnCN;
+    btnSize10.parentElement.className = otherBtnCN;
     btnSize25.disabled = false;
-    btnSize25.parentElement.className = otherBtnCN;
+    btnSize25.parentElement.className = selctedBtnCN;
     btnSize50.disabled = false;
     btnSize50.parentElement.className = otherBtnCN;
     btnSize100.disabled = false;

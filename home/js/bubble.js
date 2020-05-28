@@ -36,7 +36,7 @@ else {
 //Variables for drawing the array representation
 //Width of an element --Note it is divided by 10 since
 //  intital length of the array is 10;
-var unitx = (lengthx)/10;
+var unitx = (lengthx)/25;
 //Height if 1 unit is 3px
 const unity = 3;  
 
@@ -88,7 +88,7 @@ var aArray = [];
 //Array contaning objects to be drawn
 var oArray = [];
 //Initial Array size is 10
-var aArraySize = 10;
+var aArraySize = 25;
 //Initial array type is random
 var aArrayType = "random";
 setArray();
@@ -137,7 +137,7 @@ function Block(index , value , x , y ){
 function reset(){
     oArray = [];
     aArray = [];
-    aArraySize = 10;
+    aArraySize = 25;
     aArrayType = "random";
 
     //Related to bubble sort algorithm
@@ -306,9 +306,9 @@ function resetBtns(){
     btnPlayA.disabled = false;
     btnPauseA.disabled = true;
     btnSize10.disabled = false;
-    btnSize10.parentElement.className = selctedBtnCN;
+    btnSize10.parentElement.className = otherBtnCN;
     btnSize25.disabled = false;
-    btnSize25.parentElement.className = otherBtnCN;
+    btnSize25.parentElement.className = selctedBtnCN;
     btnSize50.disabled = false;
     btnSize50.parentElement.className = otherBtnCN;
     btnSize100.disabled = false;
