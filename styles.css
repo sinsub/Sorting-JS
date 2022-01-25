@@ -1,0 +1,36 @@
+body {
+    background-color: #A0CED9;
+}
+
+#main-nav .nav-link{
+    font-size: 1.25rem;
+    color: #432853;
+}
+
+#main-nav .nav-link:hover{
+    color: #A0CED9;
+}
+
+#canvas {
+    height: 50vh;
+    background-color: #E2F0F3;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+}
+
+.array-element {
+    background-color: #FFC09F;
+}
+
+.pivot-element {
+    background-color: #408DA0;
+}
+
+.compared-element {
+    background-color: #506368;
+}
+
+.swapped-element {
+    background-color: #506368;
+}
