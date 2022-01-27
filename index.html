@@ -58,8 +58,64 @@
 
 
         <main class="container-xxl rounded shadow-lg my-3 p-3 bg-light justify-content-center">
-            <button onclick="resetBtnClicked()">Reset</button>
-            <div id="canvas"></div>
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    
+                    <div class="col-6 col-lg-3">
+                        <select id="selectArrayType"" class=" form-select" aria-label="Select Sorting Algorithm">
+                            <option value="random" selected>Random Array</option>
+                            <option value="sorted">Sorted Array</option>
+                            <option value="descending">Sorted in Descending Order</option>
+                            <option value="repeatedKeys">Repeated Keys</option>
+                            
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <label for="rangeArraySize" id="labelRangeArraySize" class="form-label">Array Size</label>
+                                <input type="range" id="rangeArraySize" class="form-range" min="16" max="256" step="16">
+                            </div>
+                            <div class="col-6">
+                                <button id="btnNewArray" class="controlBtn" type="button">New Array</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <select id="selectAlgorithm" class="form-select" aria-label="Select Sorting Algorithm">
+                            <option value="bubble" selected>Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="shell">Shell Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="randomisedQuick">Randomised Quick Sort</option>
+                            <option value="threewayQuick">Three-Way Quick Sort</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <label for="rangeDelay" id="labelRangeDelay" class="form-label">Delay</label>
+                                <input type="range" class="form-range" id="rangeDelay"  min="10" max="1000" step="10">
+                            </div>
+                            <div class="col-6">
+                                <button id="btnSort" class="controlBtn" type="button">Sort</button>
+                                <button id="btnReset" class="controlBtn" type="button">Reset</button>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div id="canvas" class="rounded"></div>
+            </div>
         </main>
     </div>
 
