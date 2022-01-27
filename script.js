@@ -1,13 +1,16 @@
 // CSS class names
 const ARRAY_ELEMENT_CLASS = "array-element";
 const COMPARED_ELEMENT_CLASS = "compared-element";
+const SWAP_ELEMENT_CLASS = "swap-element";
 
-const ARRAY_TYPES = ["random", "sorted", "descending"];
-const SORT_TYPES = ["bubble", "selection", "insertion", "shell", "quick", "merge"];
+const ARRAY_TYPES = ["random", "sorted", "descending", "someInversions"];
+const SORT_TYPES = ["bubble", "selection", "insertion", "shell", "quick", "randomisedQuick", "threewayQuick"];
+const REPETITION_TYPES = ["none", "some", "high"];
 
 let arraySize = 32;
-let elementWidth = 80 / arraySize;
+let elementWidth = 100 / arraySize;
 let arrayType = ARRAY_TYPES[0];
+let keyRepetition = REPETITION_TYPES[0];
 let sortType = SORT_TYPES[0];
 let delay = 10;    // in ms
 let _array = [];
@@ -38,13 +41,21 @@ selectArrayType.onchange = () => {
     createArray();
 }
 
+// Select Array Type
+const selectKeyRepetition = document.getElementById("selectKeyRepetition");
+selectKeyRepetition.onchange = () => {
+    keyRepetition = selectKeyRepetition.value;
+    createArray();
+}
+
+
 // Select Array Size
 const labelRangeArraySize = document.getElementById("labelRangeArraySize");
 const rangeArraySize = document.getElementById("rangeArraySize");
 rangeArraySize.onchange = () => {
     labelRangeArraySize.innerHTML = `Array Size: ${rangeArraySize.value}`;
     arraySize = rangeArraySize.value;
-    elementWidth = 80 / arraySize;
+    elementWidth = 100 / arraySize;
     createArray();
 }
 const setRangeArraySize = (value) => {
@@ -102,21 +113,7 @@ createArray();
 
 // create and load a new array
 function createArray() {
-    switch (arrayType) {
-        case "random":
-            _array = getRandomArray(arraySize);
-            break;
-        case "sorted":
-            _array = getSortedArray(arraySize);
-            break;
-        case "descending":
-            _array = getDescendingArray(arraySize);
-            break;
-        case "repeatedKeys":
-            _array = getRepeatedKeysArray(arraySize);
-            break;
-        default: _array = getRandomArray(arraySize);
-    }
+    _array = generateArray(arraySize, keyRepetition, arrayType);
     loadArray();
 }
 
@@ -188,33 +185,86 @@ function sort() {
 function getRandomArray(arraySize) {
     const array = [];
     for (let i = 0; i < arraySize; i++) {
-        height = Math.random() * 100;
+        height = 10 + (Math.random() * 90);
         array.push(height);
     }
     return array;
 }
 
-function getSortedArray(arraySize) {
-    const array = getRandomArray(arraySize);
-    array.sort((a, b) => a - b);
-    return array;
-}
-
-function getDescendingArray(arraySize) {
-    const array = getRandomArray(arraySize);
-    array.sort((a, b) => b - a);
-    return array;
-}
-
 
 function getRepeatedKeysArray(arraySize) {
-    let keys = getRandomArray(Math.sqrt(Math.sqrt(arraySize)));
+    let keys = getRandomArray(Math.sqrt(arraySize));
     let array = [];
     for (let i = 0; i < arraySize; i++) {
         array.push(keys[Math.floor(Math.random() * (keys.length))]);
     }
     console.log(array);
     return array;
+}
+
+
+function generateKeys(arraySize, keyRepetition) {
+    let numberOfKeys;
+    switch (keyRepetition) {
+        case "none":
+            numberOfKeys = arraySize;
+            break;
+        case "some":
+            numberOfKeys = Math.sqrt(arraySize);
+            break;
+        case "high":
+            numberOfKeys = Math.sqrt(Math.sqrt(arraySize));
+            break;
+        default:
+            numberOfKeys = arraySize;
+    }
+    return getRandomArray(numberOfKeys);
+}
+
+
+function createsomeInversions(array) {
+    // not really some but okay 
+    let pseudosomeNumber = Math.sqrt(Math.sqrt(array.length));
+    for (let i = 0; i < pseudosomeNumber; i++) {
+        const j = Math.floor(Math.random() * (array.length));
+        const k = Math.floor(Math.random() * (array.length));
+        [array[k], array[j]] = [array[j], array[k]];
+    }
+}
+
+
+function generateArray(arraySize, keyRepetition, arrayType) {
+    const keys = generateKeys(arraySize, keyRepetition);
+    const array = [];
+    for (let i = 0, j = 0; i < arraySize; i++, j = (j + 1) % keys.length) {
+        array.push(keys[j]);
+    }
+    switch (arrayType) {
+        case "random":
+            shuffleArray(array);
+            break;
+        case "sorted":
+            array.sort((a, b) => a - b);
+            break;
+        case "descending":
+            array.sort((a, b) => b - a);
+            break;
+        case "someInversions":
+            array.sort((a, b) => a - b);
+            createsomeInversions(array);
+            break;
+        default:
+            shuffleArray(array);
+    }
+    return array;
+}
+
+
+function shuffleArray(array) {
+    for (let i = 0; i < array.length; i++) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 // <----- ----- ----- ----- ----- ----- -----> //
@@ -234,14 +284,14 @@ function createElementDiv(height) {
 
 
 
-function less(i, j) {
+function v_less(i, j) {
     comparesCount++;
-    const id = setTimeout((elem1, elem2, ...resetElems) => {
-        // console.log("rendering...");
-        resetModifiedElements(...resetElems);
-        elem1.className = COMPARED_ELEMENT_CLASS;
-        elem2.className = COMPARED_ELEMENT_CLASS;
-    }, totalDelay, divArray[i], divArray[j], ...modifiedElements);
+    
+    const id = setTimeout((elem1, elem2, resetElems) => {
+        resetModifiedElements(resetElems);
+        elem1.classList.add(COMPARED_ELEMENT_CLASS)
+        elem2.classList.add(COMPARED_ELEMENT_CLASS);
+    }, totalDelay, divArray[i], divArray[j], modifiedElements);
     renderQueue.push(id);
     totalDelay += delay;
     modifiedElements = [];
@@ -251,39 +301,50 @@ function less(i, j) {
 }
 
 
-function swap(i, j) {
+function v_swap(i, j) {
     if (i === j) return;
     swapCount++;
     let temp = array[i];
     array[i] = array[j];
     array[j] = temp;
 
-    const id = setTimeout((elem1, height1, elem2, height2, ...resetElems) => {
+    const id1 = setTimeout((elem1, elem2, resetElems) => {
+        resetModifiedElements(resetElems);
+        elem1.classList.add(SWAP_ELEMENT_CLASS)
+        elem2.classList.add(SWAP_ELEMENT_CLASS);
+    }, totalDelay, divArray[i], divArray[j], modifiedElements);
+    totalDelay += delay;
+    renderQueue.push(id1);
+    modifiedElements = [];
+    modifiedElements.push(divArray[i]);
+    modifiedElements.push(divArray[j]);
+
+    const id2 = setTimeout((elem1, height1, elem2, height2, resetElems) => {
         // console.log("rendering...");
-        resetModifiedElements(...resetElems);
+        resetModifiedElements(resetElems);
         elem1.style.height = `${height1}%`;
         elem2.style.height = `${height2}%`;
-    }, totalDelay, divArray[i], array[i], divArray[j], array[j], ...modifiedElements);
-    renderQueue.push(id);
+    }, totalDelay, divArray[i], array[i], divArray[j], array[j], modifiedElements);
     totalDelay += delay;
+    renderQueue.push(id2);
     modifiedElements = [];
 }
 
-function resetModifiedElements(...modifiedElements) {
+function resetModifiedElements(modifiedElements) {
     for (let elem of modifiedElements)
         elem.className = ARRAY_ELEMENT_CLASS;
 }
 
 function queueOnCompleteHandler() {
-    const id = setTimeout((...modifiedElements) => {
+    const id = setTimeout((modifiedElements) => {
         console.log("final render");
         console.log(comparesCount);
         console.log(swapCount);
         console.log(totalDelay);
-        resetModifiedElements(...modifiedElements);
+        resetModifiedElements(modifiedElements);
         resetRenderVariables();
 
-    }, totalDelay, ...modifiedElements);
+    }, totalDelay, modifiedElements);
     renderQueue.push(id);
     modifiedElements = [];
 }
@@ -301,8 +362,8 @@ function bubbleSort() {
     while (swapped) {
         swapped = false;
         for (let i = 1; i < n; i++) {
-            if (less(i, i - 1)) {
-                swap(i, i - 1);
+            if (v_less(i, i - 1)) {
+                v_swap(i, i - 1);
                 swapped = true;
             }
         }
@@ -312,8 +373,8 @@ function bubbleSort() {
 function insertionSort() {
     for (let i = 1; i < array.length; i++) {
         for (let j = i - 1; j >= 0; j--) {
-            if (!less(j + 1, j)) break;
-            swap(j + 1, j);
+            if (!v_less(j + 1, j)) break;
+            v_swap(j + 1, j);
         }
     }
 }
@@ -322,9 +383,9 @@ function selectionSort() {
     for (let i = 0; i < array.length; i++) {
         let minIdx = i;
         for (let j = i + 1; j < array.length; j++) {
-            if (less(j, minIdx)) minIdx = j;
+            if (v_less(j, minIdx)) minIdx = j;
         }
-        swap(i, minIdx);
+        v_swap(i, minIdx);
     }
 }
 
@@ -336,8 +397,8 @@ function shellSort() {
     while (h >= 1) {
         for (let i = h; i < n; i++) {
             for (let j = i; j >= h; j -= h) {
-                if (!less(j, j - h)) break;
-                swap(j, j - h);
+                if (!v_less(j, j - h)) break;
+                v_swap(j, j - h);
             }
         }
         h = Math.floor(h / 3);
@@ -349,11 +410,11 @@ function partition(lo, hi) {
     if (hi <= lo) return lo;
     let i = lo + 1, j = hi;
     while (i <= j) {
-        if (less(i, lo)) i++;
-        else if (less(lo, j)) j--;
-        else swap(i++, j--);
+        if (v_less(i, lo)) i++;
+        else if (v_less(lo, j)) j--;
+        else v_swap(i++, j--);
     }
-    swap(lo, j);
+    v_swap(lo, j);
     return j;
 }
 
@@ -361,8 +422,8 @@ function partition(lo, hi) {
 function _quickSort(lo, hi) {
     if (hi <= lo) return;
     let j = partition(lo, hi);
-    _quickSort(lo, j-1);
-    _quickSort(j+1, hi);
+    _quickSort(lo, j - 1);
+    _quickSort(j + 1, hi);
 }
 
 
@@ -379,8 +440,8 @@ function randomisedQuickSort() {
 
 function shuffle() {
     for (let i = 0; i < array.length; i++) {
-        let r = Math.floor(Math.random() * (i+1));
-        swap(i, r);
+        let r = Math.floor(Math.random() * (i + 1));
+        v_swap(i, r);
     }
 }
 
@@ -389,10 +450,10 @@ function _threeWayQuickSort(lo, hi) {
     if (hi <= lo) return;
     let i = lo, j = lo + 1, k = hi;
     while (j <= k) {
-        if (less(j, i)) 
-            swap(i++, j++);
-        else if (less(i, j))
-            swap(j, k--);
+        if (v_less(j, i))
+            v_swap(i++, j++);
+        else if (v_less(i, j))
+            v_swap(j, k--);
         else j++;
     }
     _threeWayQuickSort(lo, i - 1);
@@ -402,7 +463,7 @@ function _threeWayQuickSort(lo, hi) {
 
 function threeWayQuickSort() {
     shuffle();
-    _threeWayQuickSort(0, array.length-1);
+    _threeWayQuickSort(0, array.length - 1);
 }
 
 
