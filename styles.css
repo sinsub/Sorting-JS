@@ -46,11 +46,17 @@ main {
 }
 
 #auxCanvasContainer {
+    transition: height 500ms ease-out;
+    height: 0;
+    width: 75%;
+    background-color: #BCF4F5;
+}
+
+#auxCanvasContainer.visible {
     height: 30vh;
     width: 75%;
     background-color: #BCF4F5;
     padding: 1%;
-    display: none;
 }
 
 #auxCanvas {

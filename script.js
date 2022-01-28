@@ -6,7 +6,7 @@ const ACTIVE_SLICE_CLASS = "active-slice";
 const modificationClasses = [COMPARED_ELEMENT_CLASS, SWAP_ELEMENT_CLASS];
 
 const ARRAY_TYPES = ["random", "sorted", "descending", "someInversions"];
-const SORT_TYPES = ["bubble", "selection", "insertion", "shell", "merge", "quick", "randomisedQuick", "threewayQuick"];
+const SORT_TYPES = ["bubble", "selection", "insertion", "shell", "merge", "buttonUpMerge", "quick", "randomisedQuick", "threewayQuick"];
 const REPETITION_TYPES = ["none", "some", "high"];
 
 let arraySize = 32;
@@ -14,7 +14,7 @@ let elementWidth = getWidth(arraySize);
 let arrayType = ARRAY_TYPES[0];
 let keyRepetition = REPETITION_TYPES[0];
 let sortType = SORT_TYPES[0];
-let delay = 10;    // in ms
+let delay = 100;    // in ms
 let _array = [];
 
 let array = [];
@@ -25,7 +25,7 @@ let auxDivArray = [];
 let auxElementWidth = 0;
 
 // render variables:
-let totalDelay = 0;
+let totalDelay = 500;
 let modifiedElements = [];
 let comparesCount = 0;
 let swapCount = 0;
@@ -137,7 +137,7 @@ function createArray() {
 function resetRenderVariables() {
     while (renderQueue.length > 0)
         clearTimeout(renderQueue.pop());
-    totalDelay = 0;
+    totalDelay = 500;
     modifiedElements = [];
     comparesCount = 0;
     swapCount = 0;
@@ -147,7 +147,7 @@ function resetRenderVariables() {
     auxDivArray = [];
 
     auxCanvas.innerHTML = "";
-    auxCanvasContainer.style.display = "none";
+    auxCanvasContainer.classList.remove("visible");
 }
 
 // loads _array for sorting and 
@@ -174,7 +174,7 @@ function createAux(size) {
     size = +size;
     auxArray = Array(size).fill(0, 0);
     auxElementWidth = getWidth(size);
-    auxCanvasContainer.style.display = "block";
+    auxCanvasContainer.classList.add("visible");
     auxCanvas.innerHTML = "";
     for (let height of auxArray) {
         const elemDiv = createElementDiv(height, auxElementWidth);
@@ -207,6 +207,9 @@ function sort() {
             break;
         case "merge":
             mergeSort();
+            break;
+        case "buttonUpMerge":
+            bottomUpMergeSort();
             break;
         case "quick":
             quickSort();
@@ -410,7 +413,7 @@ function queueOnCompleteHandler() {
 }
 
 
-function v_pushActiveSlick(i, j) {
+function v_pushActiveSlice(i, j) {
     let oldSlice = [];
     if (activeSliceStack.length > 0) {
         [x, y] = activeSliceStack[activeSliceStack.length - 1];
@@ -524,7 +527,7 @@ function v_assignFromAux(i, j) {
 
 
 function bubbleSort() {
-    v_pushActiveSlick(0, array.length - 1);
+    v_pushActiveSlice(0, array.length - 1);
     let n = array.length;
     let swapped = true;
     while (swapped) {
@@ -540,7 +543,7 @@ function bubbleSort() {
 }
 
 function insertionSort() {
-    v_pushActiveSlick(0, 1);
+    v_pushActiveSlice(0, 1);
     for (let i = 1; i < array.length; i++) {
         v_replaceActiveSlice(0, i);
         for (let j = i - 1; j >= 0; j--) {
@@ -552,7 +555,7 @@ function insertionSort() {
 }
 
 function selectionSort() {
-    v_pushActiveSlick(0, array.length - 1);
+    v_pushActiveSlice(0, array.length - 1);
     for (let i = 0; i < array.length; i++) {
         v_replaceActiveSlice(i, array.length - 1);
         let minIdx = i;
@@ -566,7 +569,7 @@ function selectionSort() {
 
 
 function shellSort() {
-    v_pushActiveSlick(0, array.length - 1);
+    v_pushActiveSlice(0, array.length - 1);
 
     let n = array.length;
     let h = 1;
@@ -585,7 +588,7 @@ function shellSort() {
 
 function partition(lo, hi) {
     if (hi <= lo) return lo;
-    v_pushActiveSlick(lo, hi);
+    v_pushActiveSlice(lo, hi);
     let i = lo + 1, j = hi;
     while (i <= j) {
         if (v_less(array[i], array[lo], divArray[i], divArray[lo])) i++;
@@ -600,7 +603,7 @@ function partition(lo, hi) {
 
 function _quickSort(lo, hi) {
     if (hi <= lo) return;
-    v_pushActiveSlick(lo, hi);
+    v_pushActiveSlice(lo, hi);
     let j = partition(lo, hi);
     _quickSort(lo, j - 1);
     _quickSort(j + 1, hi);
@@ -621,7 +624,7 @@ function randomisedQuickSort() {
 }
 
 function shuffle() {
-    v_pushActiveSlick(0, 0);
+    v_pushActiveSlice(0, 0);
     for (let i = 0; i < array.length; i++) {
         v_replaceActiveSlice(0, i);
         let r = Math.floor(Math.random() * (i + 1));
@@ -633,7 +636,7 @@ function shuffle() {
 
 function _threeWayQuickSort(lo, hi) {
     if (hi <= lo) return;
-    v_pushActiveSlick(lo, hi);
+    v_pushActiveSlice(lo, hi);
     let i = lo, j = lo + 1, k = hi;
     while (j <= k) {
         if (v_less(array[j], array[i], divArray[j], divArray[i]))
@@ -672,7 +675,7 @@ function merge(lo, mid, hi) {
 
 function _mergeSort(lo, hi) {
     if (hi <= lo) return;
-    v_pushActiveSlick(lo, hi);
+    v_pushActiveSlice(lo, hi);
     let mid = Math.floor(lo + (hi - lo) / 2);
     _mergeSort(lo, mid);
     _mergeSort(mid + 1, hi);
@@ -688,6 +691,20 @@ function _mergeSort(lo, hi) {
 function mergeSort() {
     createAux(arraySize);
     _mergeSort(0, array.length - 1);
+}
+
+
+function bottomUpMergeSort() {
+    const n = array.length;
+    createAux(n);
+    v_pushActiveSlice(0, 1);
+    for (let sz = 1; sz < n; sz = sz + sz) {
+        for (let lo = 0; lo < n - sz; lo += sz + sz) {
+            v_replaceActiveSlice(lo, Math.min(lo + sz + sz - 1, n - 1));
+            merge(lo, lo + sz - 1, Math.min(lo + sz + sz - 1, n - 1)); 
+        }
+    }
+    v_popActiveSlice();
 }
 
 
