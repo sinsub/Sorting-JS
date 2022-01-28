@@ -1,9 +1,9 @@
 body {
-    background-color: #A0CED9;
+    background-color: #7BDFF2;
 }
 
 .navbar {
-    background-color: #E2F0F3;
+    background-color: #B2F7EF;
 }
 
 .navbar-expand .navbar-nav .nav-link {
@@ -13,7 +13,7 @@ body {
 }
 
 .navbar-expand .navbar-nav .nav-link:hover{
-    color: #A0CED9;
+    color: #14AECC;
 }
 
 .navbar-expand .navbar-nav .nav-link:focus {
@@ -28,9 +28,13 @@ body {
     outline: 0;
 }
 
+main {
+    background-color: #EFF7F6;
+}
+
 #canvasContainer {
     height: 50vh;
-    background-color: #E2F0F3;
+    background-color: #BCF4F5;
     padding: 1%;
 }
 
@@ -39,20 +43,19 @@ body {
     width: 100%;
     display: flex;
     align-items: flex-end;
-    border-bottom: 1px solid #A0CED9;
 }
 
 .array-element {
-    background-color: #FFC09F;
-    border: 0.05rem solid #E2F0F3;
+    background-color: #9EE5BB;
+    border: 0.05rem solid #B2F7EF;
 }
 
 .compared-element {
-    background-color: #506368;
+    background-color: #1FD0D6;
 }
 
 .swap-element {
-    background-color: #A0CED9;
+    background-color: #19ADB3;
 }
 
 .controlBtn {
@@ -87,3 +90,18 @@ body {
 
 
 
+
+
+
+/* more colours */
+/*
+body {
+    background-color: #A0CED9;
+}
+
+.navbar {
+    background-color: #E2F0F3;
+}
+
+
+*/
