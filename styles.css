@@ -33,7 +33,7 @@ main {
 }
 
 #canvasContainer {
-    height: 50vh;
+    height: 40vh;
     background-color: #BCF4F5;
     padding: 1%;
 }
@@ -45,17 +45,42 @@ main {
     align-items: flex-end;
 }
 
-.array-element {
-    background-color: #9EE5BB;
-    border: 0.05rem solid #B2F7EF;
+#auxCanvasContainer {
+    height: 30vh;
+    width: 75%;
+    background-color: #BCF4F5;
+    padding: 1%;
+    display: none;
 }
 
+#auxCanvas {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.array-element {
+    background-color: #5DD48E;
+    border-right: 1px solid #B2F7EF;
+    opacity: 0.60;
+}
+
+
+
 .compared-element {
-    background-color: #1FD0D6;
+    background-color: #1AB2B8;
+    opacity: 0.60;
 }
 
 .swap-element {
-    background-color: #19ADB3;
+    background-color: #14868A;
+    opacity: 0.60;
+}
+
+
+.active-slice {
+    opacity: 1;
 }
 
 .controlBtn {
@@ -91,17 +116,3 @@ main {
 
 
 
-
-
-/* more colours */
-/*
-body {
-    background-color: #A0CED9;
-}
-
-.navbar {
-    background-color: #E2F0F3;
-}
-
-
-*/

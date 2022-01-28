@@ -2,13 +2,15 @@
 const ARRAY_ELEMENT_CLASS = "array-element";
 const COMPARED_ELEMENT_CLASS = "compared-element";
 const SWAP_ELEMENT_CLASS = "swap-element";
+const ACTIVE_SLICE_CLASS = "active-slice";
+const modificationClasses = [COMPARED_ELEMENT_CLASS, SWAP_ELEMENT_CLASS];
 
 const ARRAY_TYPES = ["random", "sorted", "descending", "someInversions"];
 const SORT_TYPES = ["bubble", "selection", "insertion", "shell", "quick", "randomisedQuick", "threewayQuick"];
 const REPETITION_TYPES = ["none", "some", "high"];
 
 let arraySize = 32;
-let elementWidth = 100 / arraySize;
+let elementWidth = getWidth(arraySize);
 let arrayType = ARRAY_TYPES[0];
 let keyRepetition = REPETITION_TYPES[0];
 let sortType = SORT_TYPES[0];
@@ -24,6 +26,7 @@ let modifiedElements = [];
 let comparesCount = 0;
 let swapCount = 0;
 let renderQueue = [];
+let activeSliceStack = [];
 
 // status
 let loaded = false;
@@ -55,7 +58,7 @@ const rangeArraySize = document.getElementById("rangeArraySize");
 rangeArraySize.onchange = () => {
     labelRangeArraySize.innerHTML = `Array Size: ${rangeArraySize.value}`;
     arraySize = rangeArraySize.value;
-    elementWidth = 100 / arraySize;
+    elementWidth = getWidth(arraySize);
     createArray();
 }
 const setRangeArraySize = (value) => {
@@ -111,6 +114,11 @@ btnReset.onclick = () => {
 createArray();
 
 
+function getWidth(arraySize) {
+    return Math.floor((100 / arraySize) * 1000) / 1000;
+}
+
+
 // create and load a new array
 function createArray() {
     _array = generateArray(arraySize, keyRepetition, arrayType);
@@ -126,6 +134,8 @@ function resetRenderVariables() {
     modifiedElements = [];
     comparesCount = 0;
     swapCount = 0;
+    activeSliceStack = [];
+
 }
 
 // loads _array for sorting and 
@@ -148,9 +158,11 @@ function loadArray() {
 
 
 function sort() {
+    btnSort.disabled = true;
+
     if (!loaded) loadArray();
     loaded = false;
-    btnSort.disabled = true;
+
     switch (sortType) {
         case "bubble":
             bubbleSort();
@@ -286,7 +298,7 @@ function createElementDiv(height) {
 
 function v_less(i, j) {
     comparesCount++;
-    
+
     const id = setTimeout((elem1, elem2, resetElems) => {
         resetModifiedElements(resetElems);
         elem1.classList.add(COMPARED_ELEMENT_CLASS)
@@ -308,12 +320,22 @@ function v_swap(i, j) {
     array[i] = array[j];
     array[j] = temp;
 
-    const id1 = setTimeout((elem1, elem2, resetElems) => {
+    const id1 = setTimeout((delay, elem1, elem2, resetElems) => {
         resetModifiedElements(resetElems);
         elem1.classList.add(SWAP_ELEMENT_CLASS)
         elem2.classList.add(SWAP_ELEMENT_CLASS);
-    }, totalDelay, divArray[i], divArray[j], modifiedElements);
-    totalDelay += delay;
+
+        // translating?
+        let x = elem1.offsetLeft - elem2.offsetLeft;
+        elem1.style.zIndex = "1";
+        elem2.style.zIndex = "1";
+        elem1.style.transition = `transform ${delay}ms ${delay * 0.5}ms ease-out`
+        elem2.style.transition = `transform ${delay}ms ${delay * 0.5}ms ease-out`
+        elem1.style.transform = `translateX(${-x}px)`;
+        elem2.style.transform = `translateX(${x}px)`;
+
+    }, totalDelay, delay, divArray[i], divArray[j], modifiedElements);
+    totalDelay += 2 * delay;
     renderQueue.push(id1);
     modifiedElements = [];
     modifiedElements.push(divArray[i]);
@@ -322,6 +344,13 @@ function v_swap(i, j) {
     const id2 = setTimeout((elem1, height1, elem2, height2, resetElems) => {
         // console.log("rendering...");
         resetModifiedElements(resetElems);
+        elem1.style.zIndex = "auto";
+        elem2.style.zIndex = "auto";
+        elem1.style.transition = "transform 0ms"
+        elem2.style.transition = "transform 0ms"
+        elem1.style.transform = `translateX(0)`;
+        elem2.style.transform = `translateX(0)`;
+
         elem1.style.height = `${height1}%`;
         elem2.style.height = `${height2}%`;
     }, totalDelay, divArray[i], array[i], divArray[j], array[j], modifiedElements);
@@ -332,7 +361,8 @@ function v_swap(i, j) {
 
 function resetModifiedElements(modifiedElements) {
     for (let elem of modifiedElements)
-        elem.className = ARRAY_ELEMENT_CLASS;
+        for (let className of modificationClasses)
+            elem.classList.remove(className);
 }
 
 function queueOnCompleteHandler() {
@@ -350,6 +380,78 @@ function queueOnCompleteHandler() {
 }
 
 
+function v_pushActiveSlick(i, j) {
+    let oldSlice = [];
+    if (activeSliceStack.length > 0) {
+        [x, y] = activeSliceStack[activeSliceStack.length - 1];
+        oldSlice = divArray.slice(x, y + 1);
+    }
+
+    activeSliceStack.push([i, j]);
+    let slice = divArray.slice(i, j + 1);
+
+    const id = setTimeout((slice, oldSlice, resetElems) => {
+        resetModifiedElements(resetElems);
+        for (let elem of oldSlice)
+            elem.classList.remove(ACTIVE_SLICE_CLASS);
+        for (let elem of slice)
+            elem.classList.add(ACTIVE_SLICE_CLASS);
+    }, totalDelay, slice, oldSlice, modifiedElements);
+
+    totalDelay += delay;
+    renderQueue.push(id);
+    modifiedElements = [];
+}
+
+function v_popActiveSlice() {
+    [i, j] = activeSliceStack.pop();
+    const slice1 = divArray.slice(i, j + 1);
+
+    let slice2 = [];
+    if (activeSliceStack.length > 0) {
+        [x, y] = activeSliceStack[activeSliceStack.length - 1];
+        slice2 = divArray.slice(x, y + 1);
+    }
+
+    const id = setTimeout((slice1, slice2, resetElems) => {
+        resetModifiedElements(resetElems);
+        for (let elem of slice1)
+            elem.classList.remove(ACTIVE_SLICE_CLASS);
+        for (let elem of slice2)
+            elem.classList.add(ACTIVE_SLICE_CLASS);
+    }, totalDelay, slice1, slice2, modifiedElements);
+
+    totalDelay += delay;
+    renderQueue.push(id);
+    modifiedElements = [];
+}
+
+
+function v_replaceActiveSlice(i, j) {
+    let oldSlice = [];
+    if (activeSliceStack.length > 0) {
+        [x, y] = activeSliceStack[activeSliceStack.length - 1];
+        oldSlice = divArray.slice(x, y + 1);
+        activeSliceStack.pop();
+    }
+
+    activeSliceStack.push([i, j]);
+    let slice = divArray.slice(i, j + 1);
+
+    const id = setTimeout((slice, oldSlice, resetElems) => {
+        resetModifiedElements(resetElems);
+        for (let elem of oldSlice)
+            elem.classList.remove(ACTIVE_SLICE_CLASS);
+        for (let elem of slice)
+            elem.classList.add(ACTIVE_SLICE_CLASS);
+    }, totalDelay, slice, oldSlice, modifiedElements);
+
+    totalDelay += delay;
+    renderQueue.push(id);
+    modifiedElements = [];
+}
+
+
 // <----- ----- ----- ----- ----- ----- -----> //
 
 
@@ -357,6 +459,7 @@ function queueOnCompleteHandler() {
 
 
 function bubbleSort() {
+    v_pushActiveSlick(0, array.length - 1);
     let n = array.length;
     let swapped = true;
     while (swapped) {
@@ -368,29 +471,38 @@ function bubbleSort() {
             }
         }
     }
+    v_popActiveSlice();
 }
 
 function insertionSort() {
+    v_pushActiveSlick(0, 1);
     for (let i = 1; i < array.length; i++) {
+        v_replaceActiveSlice(0, i);
         for (let j = i - 1; j >= 0; j--) {
             if (!v_less(j + 1, j)) break;
             v_swap(j + 1, j);
         }
     }
+    v_popActiveSlice();
 }
 
 function selectionSort() {
-    for (let i = 0; i < array.length; i++) {
+    v_pushActiveSlick(0, array.length - 1);
+    for (let i = 0; i < array.length; i++) {   
+        v_replaceActiveSlice(i, array.length - 1);
         let minIdx = i;
         for (let j = i + 1; j < array.length; j++) {
             if (v_less(j, minIdx)) minIdx = j;
         }
         v_swap(i, minIdx);
     }
+    v_popActiveSlice();
 }
 
 
 function shellSort() {
+    v_pushActiveSlick(0, array.length - 1);
+
     let n = array.length;
     let h = 1;
     while (h < Math.floor(n / 3)) h = 3 * h + 1;
@@ -408,6 +520,7 @@ function shellSort() {
 
 function partition(lo, hi) {
     if (hi <= lo) return lo;
+    v_pushActiveSlick(lo, hi);
     let i = lo + 1, j = hi;
     while (i <= j) {
         if (v_less(i, lo)) i++;
@@ -415,15 +528,19 @@ function partition(lo, hi) {
         else v_swap(i++, j--);
     }
     v_swap(lo, j);
+    v_popActiveSlice();
     return j;
 }
 
 
 function _quickSort(lo, hi) {
     if (hi <= lo) return;
+    v_pushActiveSlick(lo, hi);
     let j = partition(lo, hi);
     _quickSort(lo, j - 1);
     _quickSort(j + 1, hi);
+    v_popActiveSlice();
+
 }
 
 
@@ -439,15 +556,19 @@ function randomisedQuickSort() {
 }
 
 function shuffle() {
+    v_pushActiveSlick(0, 0);
     for (let i = 0; i < array.length; i++) {
+        v_replaceActiveSlice(0, i);
         let r = Math.floor(Math.random() * (i + 1));
         v_swap(i, r);
     }
+    v_popActiveSlice();
 }
 
 
 function _threeWayQuickSort(lo, hi) {
     if (hi <= lo) return;
+    v_pushActiveSlick(lo, hi);
     let i = lo, j = lo + 1, k = hi;
     while (j <= k) {
         if (v_less(j, i))
@@ -458,6 +579,7 @@ function _threeWayQuickSort(lo, hi) {
     }
     _threeWayQuickSort(lo, i - 1);
     _threeWayQuickSort(j, hi);
+    v_popActiveSlice();
 }
 
 
